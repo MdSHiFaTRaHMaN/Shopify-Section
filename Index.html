@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Feature Showcase</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background-color: #f8fafc;
+        color: #334155;
+        line-height: 1.6;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .container {
+        max-width: 800px;
+        width: 100%;
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 40px;
+        color: #1e293b;
+        font-weight: 600;
+        font-size: 2.5rem;
+      }
+
+      .tab-section {
+        display: flex;
+        flex-direction: column;
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+      }
+
+      @media (min-width: 768px) {
+        .tab-section {
+          flex-direction: row;
+          min-height: 600px;
+        }
+      }
+
+      /* Tab Buttons */
+      .tab-buttons {
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        padding: 20px;
+        background: #f1f5f9;
+        gap: 15px;
+      }
+
+      .tab-buttons {
+        width: 30%;
+        padding: 7px 15px;
+        overflow-x: visible;
+      }
+
+      @media (min-width: 768px) {
+        .tab-buttons {
+          flex-direction: column;
+          width: 31%;
+          padding: 7px 15px;
+          overflow-x: visible;
+        }
+      }
+
+      .tab-button {
+        background: white;
+        border: 2px solid transparent;
+        border-radius: 6px;
+        padding: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 120px;
+      }
+
+      @media (min-width: 768px) {
+        .tab-button {
+          min-width: auto;
+          width: 100%;
+        }
+      }
+
+      .tab-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+      }
+
+      .tab-button.active[data-color="blue"] {
+        border-color: #0ea5e9;
+        box-shadow: 0 4px 12px rgba(14, 165, 233, 0.15);
+      }
+
+      .tab-button.active[data-color="green"] {
+        border-color: #10b981;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+      }
+
+      .tab-button.active[data-color="gold"] {
+        border-color: #f59e0b;
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15);
+      }
+
+      .tab-button.active[data-color="purple"] {
+        border-color: #8b5cf6;
+        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
+      }
+
+      .fish-icon {
+        width: 60px;
+        height: 40px;
+        border-radius: 50% 50% 50% 0;
+        margin-bottom: 10px;
+        position: relative;
+      }
+
+      .fish-icon[data-color="blue"] {
+        background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+      }
+
+      .fish-icon[data-color="green"] {
+        background: linear-gradient(135deg, #34d399, #10b981);
+      }
+
+      .fish-icon[data-color="gold"] {
+        background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      }
+
+      .fish-icon[data-color="purple"] {
+        background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+      }
+
+      .fish-icon::after {
+        content: "";
+        position: absolute;
+        top: 15px;
+        right: -5px;
+        width: 0;
+        height: 0;
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        border-left: 10px solid;
+      }
+
+      .fish-icon[data-color="blue"]::after {
+        border-left-color: #0ea5e9;
+      }
+
+      .fish-icon[data-color="green"]::after {
+        border-left-color: #10b981;
+      }
+
+      .fish-icon[data-color="gold"]::after {
+        border-left-color: #f59e0b;
+      }
+
+      .fish-icon[data-color="purple"]::after {
+        border-left-color: #8b5cf6;
+      }
+
+      .tab-label {
+        font-size: 14px;
+        font-weight: 600;
+        color: #475569;
+      }
+
+      .tab-button.active .tab-label {
+        font-weight: 700;
+      }
+
+      .tab-button.active[data-color="blue"] .tab-label {
+        color: #0ea5e9;
+      }
+
+      .tab-button.active[data-color="green"] .tab-label {
+        color: #10b981;
+      }
+
+      .tab-button.active[data-color="gold"] .tab-label {
+        color: #f59e0b;
+      }
+
+      .tab-button.active[data-color="purple"] .tab-label {
+        color: #8b5cf6;
+      }
+
+      /* Tab Content */
+      .tab-content {
+        width: 100%;
+        padding: 30px;
+        display: none;
+      }
+
+      @media (min-width: 768px) {
+        .tab-content {
+          width: 75%;
+          padding: 40px;
+        }
+      }
+
+      .tab-content.active {
+        display: block;
+        animation: fadeIn 0.5s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .product-title {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 15px;
+        color: #1e293b;
+      }
+
+      .category-label {
+        display: inline-block;
+        padding: 6px 16px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 30px;
+      }
+
+      .category-label[data-color="blue"] {
+        background: #e0f2fe;
+        color: #0c4a6e;
+      }
+
+      .category-label[data-color="green"] {
+        background: #d1fae5;
+        color: #064e3b;
+      }
+
+      .category-label[data-color="gold"] {
+        background: #fef3c7;
+        color: #78350f;
+      }
+
+      .category-label[data-color="purple"] {
+        background: #ede9fe;
+        color: #581c87;
+      }
+
+      .content-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      @media (min-width: 992px) {
+        .content-wrapper {
+          flex-direction: row;
+          align-items: flex-start;
+        }
+      }
+
+      .main-product {
+        position: relative;
+        margin-bottom: 40px;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+      }
+
+      @media (min-width: 992px) {
+        .main-product {
+          width: 40%;
+          margin-right: 40px;
+          margin-bottom: 0;
+        }
+      }
+
+      .main-fish {
+        width: 200px;
+        height: 140px;
+        border-radius: 50% 50% 50% 0;
+        position: relative;
+      }
+
+      .main-fish[data-color="blue"] {
+        background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+      }
+
+      .main-fish[data-color="green"] {
+        background: linear-gradient(135deg, #34d399, #10b981);
+      }
+
+      .main-fish[data-color="gold"] {
+        background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      }
+
+      .main-fish[data-color="purple"] {
+        background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+      }
+
+      .main-fish::after {
+        content: "";
+        position: absolute;
+        top: 55px;
+        right: -10px;
+        width: 0;
+        height: 0;
+        border-top: 10px solid transparent;
+        border-bottom: 10px solid transparent;
+        border-left: 20px solid;
+      }
+
+      .main-fish[data-color="blue"]::after {
+        border-left-color: #0ea5e9;
+      }
+
+      .main-fish[data-color="green"]::after {
+        border-left-color: #10b981;
+      }
+
+      .main-fish[data-color="gold"]::after {
+        border-left-color: #f59e0b;
+      }
+
+      .main-fish[data-color="purple"]::after {
+        border-left-color: #8b5cf6;
+      }
+
+      .feature-callouts {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+        width: 100%;
+      }
+
+      @media (min-width: 576px) {
+        .feature-callouts {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      @media (min-width: 992px) {
+        .feature-callouts {
+          width: 60%;
+        }
+      }
+
+      .feature {
+        background: #f8fafc;
+        padding: 15px;
+        border-radius: 12px;
+        position: relative;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
+        border-left: 4px solid;
+      }
+
+      .feature[data-color="blue"] {
+        border-left-color: #0ea5e9;
+      }
+
+      .feature[data-color="green"] {
+        border-left-color: #10b981;
+      }
+
+      .feature[data-color="gold"] {
+        border-left-color: #f59e0b;
+      }
+
+      .feature[data-color="purple"] {
+        border-left-color: #8b5cf6;
+      }
+
+      .feature-text {
+        font-size: 15px;
+        font-weight: 500;
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 767px) {
+        .product-title {
+          font-size: 26px;
+        }
+
+        .tab-content {
+          padding: 20px;
+        }
+
+        h1 {
+          font-size: 2rem;
+        }
+      }
+      .tab-label img {
+        width: 100px;
+        height: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Product Feature Showcase</h1>
+
+      <div class="tab-section">
+        <!-- Tab Buttons -->
+        <div class="tab-buttons">
+          <button class="tab-button active" data-tab="tab1" data-color="blue">
+            <span class="tab-label"
+              ><img
+                src="https://cdn.shopify.com/s/files/1/0955/2553/6062/files/Untitled_design_21.png?v=1758798690"
+                alt=""
+            /></span>
+          </button>
+          <button class="tab-button" data-tab="tab2" data-color="green">
+            <span class="tab-label"
+              ><img
+                src="https://cdn.shopify.com/s/files/1/0955/2553/6062/files/Untitled_design_23.png?v=1758800543"
+                alt=""
+            /></span>
+          </button>
+          <button class="tab-button" data-tab="tab3" data-color="gold">
+            <div class="fish-icon" data-color="gold"></div>
+            <span class="tab-label">Sunshine Gold</span>
+          </button>
+          <button class="tab-button" data-tab="tab4" data-color="purple">
+            <div class="fish-icon" data-color="purple"></div>
+            <span class="tab-label">Purple Majesty</span>
+          </button>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="tab-content active" id="tab1" data-color="blue">
+          <img
+            src="https://cdn.shopify.com/s/files/1/0955/2553/6062/files/photo_2025-09-25_17-16-50.jpg?v=1758799045"
+            alt=""
+          />
+        </div>
+        <!-- tab 2  -->
+        <div class="tab-content" id="tab2" data-color="green">
+          <img
+            src="https://cdn.shopify.com/s/files/1/0955/2553/6062/files/photo_2025-09-25_17-05-02.jpg?v=1758800207"
+            alt=""
+          />
+        </div>
+
+        <div class="tab-content" id="tab3" data-color="gold">
+          <h2 class="product-title">Sunshine Gold</h2>
+          <span class="category-label" data-color="gold">Digestive Health</span>
+
+          <div class="content-wrapper">
+            <div class="main-product">
+              <div class="main-fish" data-color="gold"></div>
+            </div>
+
+            <div class="feature-callouts">
+              <div class="feature" data-color="gold">
+                <p class="feature-text">Gentle on sensitive stomachs</p>
+              </div>
+              <div class="feature" data-color="gold">
+                <p class="feature-text">Prebiotics for gut health</p>
+              </div>
+              <div class="feature" data-color="gold">
+                <p class="feature-text">Easy to digest formula</p>
+              </div>
+              <div class="feature" data-color="gold">
+                <p class="feature-text">Reduces digestive discomfort</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-content" id="tab4" data-color="purple">
+          <h2 class="product-title">Purple Majesty</h2>
+          <span class="category-label" data-color="purple">Joint Care</span>
+
+          <div class="content-wrapper">
+            <div class="main-product">
+              <div class="main-fish" data-color="purple"></div>
+            </div>
+
+            <div class="feature-callouts">
+              <div class="feature" data-color="purple">
+                <p class="feature-text">Glucosamine for joint health</p>
+              </div>
+              <div class="feature" data-color="purple">
+                <p class="feature-text">Supports mobility and flexibility</p>
+              </div>
+              <div class="feature" data-color="purple">
+                <p class="feature-text">Reduces inflammation naturally</p>
+              </div>
+              <div class="feature" data-color="purple">
+                <p class="feature-text">Ideal for senior cats</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const tabButtons = document.querySelectorAll(".tab-button");
+        const tabContents = document.querySelectorAll(".tab-content");
+
+        tabButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            const tabId = button.getAttribute("data-tab");
+            const color = button.getAttribute("data-color");
+
+            // Remove active class from all buttons and contents
+            tabButtons.forEach((btn) => btn.classList.remove("active"));
+            tabContents.forEach((content) =>
+              content.classList.remove("active")
+            );
+
+            // Add active class to clicked button and corresponding content
+            button.classList.add("active");
+            document.getElementById(tabId).classList.add("active");
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
