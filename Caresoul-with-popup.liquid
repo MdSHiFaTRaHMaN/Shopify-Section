@@ -1,0 +1,899 @@
+<style>
+
+  .pioneering-tech-section-dev {
+    position: relative;
+    width: 100%;
+    background: linear-gradient(
+        rgba(10, 20, 30, 0.85),
+        rgba(10, 20, 30, 0.85)
+      ),
+      url("https://cdn.shopify.com/s/files/1/0954/8972/0585/files/imgi_257_Frame-1960931015_1440x_6e158a4c-0fea-45a8-a0ae-d9a07f1a3875.png?v=1761027425")
+        center/cover no-repeat;
+    padding: 60px 20px;
+    color: #fff;
+  }
+
+  .content-wrapper-dev {
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  .section-header-dev {
+    text-align: center;
+    margin-bottom: 50px;
+  }
+
+  .section-title-dev {
+    font-size: 40px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+  }
+
+  .section-subtitle-dev {
+    font-size: 1.8rem;
+    font-weight: 300;
+    color: #e0e0e0;
+    max-width: 900px;
+    margin: 0 auto;
+    line-height: 1.8;
+  }
+
+  .tech-icons-dev {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 80px;
+    margin: 60px 0 80px;
+    flex-wrap: wrap;
+  }
+
+  .tech-icon-item-dev {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .icon-circle-dev {
+    width: 80px;
+    height: 80px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+
+  .icon-circle-dev:hover {
+    border-color: #fff;
+    transform: scale(1.1);
+  }
+
+  .icon-circle-dev svg {
+    width: 40px;
+    height: 40px;
+    stroke: #fff;
+    fill: none;
+    stroke-width: 1.5;
+  }
+
+  .tech-icon-label-dev {
+    font-size: 1.6rem;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+  }
+
+  .carousel-container-dev {
+    position: relative;
+    overflow: hidden;
+    padding: 40px 0 60px;
+  }
+
+  .carousel-track-dev {
+    display: flex;
+    gap: 25px;
+    transition: transform 0.5s ease;
+    padding: 0 calc(50% - 140px);
+    align-items: center;
+  }
+
+  .carousel-card-dev {
+    flex: 0 0 auto;
+    width: 280px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    cursor: pointer;
+    user-select: none;
+    opacity: 0.6;
+    transform: scale(0.9);
+  }
+
+  .carousel-card-dev.active {
+    opacity: 1;
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+    z-index: 5;
+  }
+
+  .carousel-card-dev.dragging {
+    cursor: grabbing;
+  }
+
+  .carousel-card-dev:hover {
+    opacity: 1;
+  }
+
+  .card-header-dev {
+    padding: 20px 20px 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .card-icon-dev {
+    width: 45px;
+    height: 45px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card-icon-dev svg {
+    width: 24px;
+    height: 24px;
+    stroke: #fff;
+    fill: none;
+    stroke-width: 2;
+  }
+
+  .card-title-group-dev {
+    flex: 1;
+  }
+
+  .card-title-dev {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 3px;
+  }
+
+  .card-subtitle {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 300;
+  }
+
+  .card-image {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+  }
+
+  .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .card-plus-btn {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+  }
+
+  .card-plus-btn:hover {
+    background: #fff;
+    transform: scale(1.15) rotate(90deg);
+  }
+
+  .card-plus-btn svg {
+    width: 20px;
+    height: 20px;
+    stroke: #1a1a1a;
+    stroke-width: 3;
+  }
+
+  .carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 30px;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .dot.active {
+    background: #fff;
+    width: 40px;
+    border-radius: 5px;
+  }
+
+  /* Modal Styles */
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .modal.active {
+    display: flex;
+    opacity: 1;
+  }
+
+  .modal-content {
+    background: rgba(20, 30, 40, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    max-width: 800px;
+    width: 100%;
+    overflow-y: auto;
+    padding: 40px;
+    position: relative;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+  }
+
+  .modal.active .modal-content {
+    transform: scale(1);
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+
+  .modal-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+  }
+
+  .modal-close svg {
+    width: 20px;
+    height: 20px;
+    stroke: #fff;
+    stroke-width: 2;
+  }
+
+  .modal-image {
+    width: 100%;
+    height: 350px;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 30px;
+  }
+
+  .modal-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .modal-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 15px;
+  }
+
+  .modal-description {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  /* Responsive */
+  @media (max-width: 1200px) {
+    .carousel-track-dev {
+      justify-content: flex-start;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .section-title-dev {
+      font-size: 2rem;
+    }
+
+    .section-subtitle-dev {
+      font-size: 1rem;
+    }
+
+    .tech-icons-dev {
+      gap: 40px;
+    }
+
+    .icon-circle-dev {
+      width: 60px;
+      height: 60px;
+    }
+
+    .icon-circle-dev svg {
+      width: 30px;
+      height: 30px;
+    }
+
+    .carousel-card-dev {
+      width: 260px;
+    }
+
+    .modal-content {
+      padding: 30px 20px;
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .pioneering-tech-section-dev {
+      padding: 60px 15px 80px;
+    }
+
+    .section-title-dev {
+      font-size: 1.75rem;
+    }
+
+    .tech-icons-dev {
+      gap: 30px;
+    }
+
+    .carousel-card-dev {
+      width: 280px;
+    }
+  }
+</style>
+<section class="pioneering-tech-section-dev">
+  <div class="content-wrapper-dev">
+    <div class="section-header-dev">
+      <h1 class="section-title-dev">Pioneering Technology</h1>
+      <p class="section-subtitle-dev">
+        Equipped with advanced navigation, smart vision, and tele-control technology, Yarbo core handles every task
+        seamlessly—so you don't have to.
+      </p>
+    </div>
+
+    <div class="tech-icons-dev">
+      <div class="tech-icon-item-dev">
+        <div class="icon-circle-dev">
+          <img src="https://img-va.myshopline.com/image/store/1737714205978/Group-1960930319-1_512x.png?w=512&h=512">
+        </div>
+        <span class="tech-icon-label-dev">RTK-GPS</span>
+      </div>
+      <div class="tech-icon-item-dev">
+        <div class="icon-circle-dev">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 6v6l4 2" />
+          </svg>
+        </div>
+        <span class="tech-icon-label-dev">IMU Sensor</span>
+      </div>
+      <div class="tech-icon-item-dev">
+        <div class="icon-circle-dev">
+          <img src="https://img-va.myshopline.com/image/store/1737714205978/c24b0d9789cc46a08ac54d077c161b93_512x.png?w=512&h=512">
+        </div>
+        <span class="tech-icon-label-dev">Odom Sensor</span>
+      </div>
+      <div class="tech-icon-item-dev">
+        <div class="icon-circle-dev">
+          <svg viewBox="0 0 24 24">
+            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+        </div>
+        <span class="tech-icon-label-dev">Binocular Cameras</span>
+      </div>
+    </div>
+
+    <div class="carousel-container-dev">
+      <div class="carousel-track-dev" id="carouselTrack">
+        <!-- Card 1: Auto Load Delivery -->
+        <div class="carousel-card-dev" data-index="0">
+          <div class="card-header-dev">
+            <div class="card-icon-dev">
+              <img src="https://img-va.myshopline.com/image/store/1737714205978/Group-1960930321-0_512x.png?w=512&h=512">
+            </div>
+            <div class="card-title-group-dev">
+              <div class="card-title-dev">Auto Load Delivery</div>
+              <div class="card-subtitle">Self-driven loader nails your chore cycle</div>
+            </div>
+          </div>
+          <div class="card-image">
+            <img
+              src="https://img-va.myshopline.com/image/store/1737714205978/Mask-group-5_1352x.png?w=1352&h=821"
+              alt="Auto Load Delivery"
+            >
+            <button class="card-plus-btn" onclick="openModal(0)">
+              <img src="https://img-va.myshopline.com/image/store/1737714205978/Group-1960930322-0_512x.png?w=512&h=512">
+            </button>
+          </div>
+        </div>
+
+        <!-- Card 2: Tow Everything -->
+        <div class="carousel-card-dev active" data-index="1">
+          <div class="card-header-dev">
+            <div class="card-icon-dev">
+              <svg viewBox="0 0 24 24">
+                <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+              </svg>
+            </div>
+            <div class="card-title-group-dev">
+              <div class="card-title-dev">Tow Everything</div>
+              <div class="card-subtitle">Autopilot hauler tailored for every task</div>
+            </div>
+          </div>
+          <div class="card-image">
+            <img
+              src="https://img-va.myshopline.com/image/store/1737714205978/Mask-group-4_1734x.png?w=1734&h=1054"
+              alt="Tow Everything"
+            >
+            <button class="card-plus-btn" onclick="openModal(1)">
+              <svg viewBox="0 0 24 24">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Card 3: Follow-Me -->
+        <div class="carousel-card-dev" data-index="2">
+          <div class="card-header-dev">
+            <div class="card-icon-dev">
+              <svg viewBox="0 0 24 24">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
+            </div>
+            <div class="card-title-group-dev">
+              <div class="card-title-dev">Follow-Me</div>
+              <div class="card-subtitle">Your new stalker (but like, in a helpful way)</div>
+            </div>
+          </div>
+          <div class="card-image">
+            <img
+              src="https://img-va.myshopline.com/image/store/1737714205978/image-654600222_1352x.png?w=1352&h=821"
+              alt="Follow-Me"
+            >
+            <button class="card-plus-btn" onclick="openModal(2)">
+              <svg viewBox="0 0 24 24">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Card 4: Yard Patrol -->
+        <div class="carousel-card-dev" data-index="3">
+          <div class="card-header-dev">
+            <div class="card-icon-dev">
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 6v6l4 2" />
+              </svg>
+            </div>
+            <div class="card-title-group-dev">
+              <div class="card-title-dev">Yard Patrol</div>
+              <div class="card-subtitle">Autopilot hauler tailored for every beat</div>
+            </div>
+          </div>
+          <div class="card-image">
+            <img
+              src="https://img-va.myshopline.com/image/store/1737714205978/Mask-group-(1)-2_1352x.png?w=1352&h=821"
+              alt="Yard Patrol"
+            >
+            <button class="card-plus-btn" onclick="openModal(3)">
+              <svg viewBox="0 0 24 24">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Card 5: Smart Vision -->
+        <div class="carousel-card-dev" data-index="4">
+          <div class="card-header-dev">
+            <div class="card-icon-dev">
+              <svg viewBox="0 0 24 24">
+                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            </div>
+            <div class="card-title-group-dev">
+              <div class="card-title-dev">Smart Vision</div>
+              <div class="card-subtitle">Lawn Twitch streamer (no ads)</div>
+            </div>
+          </div>
+          <div class="card-image">
+            <img
+              src="https://img-va.myshopline.com/image/store/1737714205978/123-124_1352x.png?w=1352&h=821"
+              alt="Smart Vision"
+            >
+            <button class="card-plus-btn" onclick="openModal(4)">
+              <svg viewBox="0 0 24 24">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <!-- Card 6: Smart Vision -->
+        <div class="carousel-card-dev" data-index="4">
+          <div class="card-header-dev">
+            <div class="card-icon-dev">
+              <svg viewBox="0 0 24 24">
+                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            </div>
+            <div class="card-title-group-dev">
+              <div class="card-title-dev">Smart Vision</div>
+              <div class="card-subtitle">Lawn Twitch streamer (no ads)</div>
+            </div>
+          </div>
+          <div class="card-image">
+            <img
+              src="https://img-va.myshopline.com/image/store/1737714205978/123-124_1352x.png?w=1352&h=821"
+              alt="Smart Vision"
+            >
+            <button class="card-plus-btn" onclick="openModal(4)">
+              <svg viewBox="0 0 24 24">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <!-- Card 7: Smart Vision -->
+        <div class="carousel-card-dev" data-index="4">
+          <div class="card-header-dev">
+            <div class="card-icon-dev">
+              <svg viewBox="0 0 24 24">
+                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            </div>
+            <div class="card-title-group-dev">
+              <div class="card-title-dev">Smart Vision</div>
+              <div class="card-subtitle">Lawn Twitch streamer (no ads)</div>
+            </div>
+          </div>
+          <div class="card-image">
+            <img
+              src="https://img-va.myshopline.com/image/store/1737714205978/123-124_1352x.png?w=1352&h=821"
+              alt="Smart Vision"
+            >
+            <button class="card-plus-btn" onclick="openModal(4)">
+              <svg viewBox="0 0 24 24">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="carousel-dots">
+        <span class="dot" onclick="goToSlide(0)"></span>
+        <span class="dot" onclick="goToSlide(1)"></span>
+        <span class="dot active" onclick="goToSlide(2)"></span>
+        <span class="dot" onclick="goToSlide(3)"></span>
+        <span class="dot" onclick="goToSlide(4)"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Modal -->
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal()">
+      <svg viewBox="0 0 24 24">
+        <line x1="18" y1="6" x2="6" y2="18" />
+        <line x1="6" y1="6" x2="18" y2="18" />
+      </svg>
+    </button>
+    <div class="modal-image">
+      <img id="modalImage" src="" alt="">
+    </div>
+    <h2 class="modal-title" id="modalTitle"></h2>
+    <p class="modal-description" id="modalDescription"></p>
+  </div>
+</div>
+
+<script>
+  const cardsData = [
+    {
+      title: 'Auto Load Delivery',
+      image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80',
+      description:
+        "Experience the future of yard maintenance with our autonomous loader system. Yarbo's self-driven loader intelligently navigates your property, handling deliveries and material transport with precision. Using advanced RTK-GPS and sensor fusion, it creates optimal paths while avoiding obstacles, making your chore cycle effortless and efficient.",
+    },
+    {
+      title: 'Tow Everything',
+      image: 'https://images.unsplash.com/photo-1621361365424-06f0e1eb5c49?w=800&q=80',
+      description:
+        "Transform your Yarbo into the ultimate hauling solution. Whether it's yard waste, gardening equipment, or heavy materials, our autopilot towing system handles it all. With intelligent load detection and adaptive traction control, Yarbo safely transports items across your property, automatically adjusting its speed and power based on terrain and load weight.",
+    },
+    {
+      title: 'Follow-Me Mode',
+      image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
+      description:
+        "Your personal robotic assistant that follows you around the yard. Perfect for gardening, landscaping projects, or any outdoor work, Follow-Me mode uses advanced binocular cameras and AI tracking to maintain a safe distance while carrying your tools and materials. It's like having an extra pair of hands that never gets tired.",
+    },
+    {
+      title: 'Yard Patrol',
+      image: 'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800&q=80',
+      description:
+        "Set up automated patrol routes for continuous yard monitoring. Yarbo's intelligent patrol system navigates predefined paths, checking for issues like fence integrity, irrigation problems, or unwanted visitors. With real-time alerts and smart vision capabilities, it keeps your property secure and well-maintained around the clock.",
+    },
+    {
+      title: 'Smart Vision',
+      image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80',
+      description:
+        "Watch your yard maintenance in real-time from anywhere. Smart Vision provides live streaming of Yarbo's perspective, letting you monitor its work, review completed tasks, and even manually control it remotely. Advanced computer vision helps Yarbo identify grass types, detect obstacles, and optimize its mowing patterns for the perfect lawn.",
+    },
+    {
+      title: 'Smart Vision',
+      image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80',
+      description:
+        "Watch your yard maintenance in real-time from anywhere. Smart Vision provides live streaming of Yarbo's perspective, letting you monitor its work, review completed tasks, and even manually control it remotely. Advanced computer vision helps Yarbo identify grass types, detect obstacles, and optimize its mowing patterns for the perfect lawn.",
+    },
+    {
+      title: 'Smart Vision',
+      image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80',
+      description:
+        "Watch your yard maintenance in real-time from anywhere. Smart Vision provides live streaming of Yarbo's perspective, letting you monitor its work, review completed tasks, and even manually control it remotely. Advanced computer vision helps Yarbo identify grass types, detect obstacles, and optimize its mowing patterns for the perfect lawn.",
+    }
+  ];
+
+  let currentSlide = 2; // Start with card 3 (index 2) in center
+  const track = document.getElementById('carouselTrack');
+  const dots = document.querySelectorAll('.dot');
+  const cards = document.querySelectorAll('.carousel-card-dev');
+
+  // Drag functionality variables
+  let isDragging = false;
+  let startPos = 0;
+  let currentTranslate = 0;
+  let prevTranslate = 0;
+  let animationID = 0;
+  let currentIndex = 2; // Start at card 3
+
+  function goToSlide(index) {
+    currentSlide = index;
+    currentIndex = index;
+    updateCarousel();
+    updateActiveCard();
+  }
+
+  function updateActiveCard() {
+    cards.forEach((card, index) => {
+      if (index === currentSlide) {
+        card.classList.add('active');
+      } else {
+        card.classList.remove('active');
+      }
+    });
+  }
+
+  function updateCarousel() {
+    const cardWidth = 305; // 280px card + 25px gap
+    const newTranslate = -currentSlide * cardWidth;
+    track.style.transform = `translateX(${newTranslate}px)`;
+    currentTranslate = newTranslate;
+    prevTranslate = newTranslate;
+
+    dots.forEach((dot, index) => {
+      dot.classList.toggle('active', index === currentSlide);
+    });
+
+    updateActiveCard();
+  }
+
+  function openModal(index) {
+    const modal = document.getElementById('modal');
+    const modalImage = document.getElementById('modalImage');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDescription = document.getElementById('modalDescription');
+
+    modalImage.src = cardsData[index].image;
+    modalTitle.textContent = cardsData[index].title;
+    modalDescription.textContent = cardsData[index].description;
+
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    const modal = document.getElementById('modal');
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  // Close modal on background click
+  document.getElementById('modal').addEventListener('click', function (e) {
+    if (e.target === this) {
+      closeModal();
+    }
+  });
+
+  // Close modal on Escape key
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      closeModal();
+    }
+  });
+
+  // Drag functionality for carousel
+  function touchStart(index) {
+    return function (event) {
+      // Don't start drag if clicking on the plus button
+      if (event.target.closest('.card-plus-btn')) {
+        return;
+      }
+
+      currentIndex = index;
+      startPos = getPositionX(event);
+      isDragging = true;
+      animationID = requestAnimationFrame(animation);
+      track.classList.add('dragging');
+      cards.forEach((card) => card.classList.add('dragging'));
+    };
+  }
+
+  function touchEnd() {
+    if (!isDragging) return;
+
+    isDragging = false;
+    cancelAnimationFrame(animationID);
+
+    const movedBy = currentTranslate - prevTranslate;
+
+    // If moved enough negative (drag left), go to next slide
+    if (movedBy < -50 && currentSlide < 4) {
+      currentSlide += 1;
+    }
+
+    // If moved enough positive (drag right), go to previous slide
+    if (movedBy > 50 && currentSlide > 0) {
+      currentSlide -= 1;
+    }
+
+    setPositionByIndex();
+    track.classList.remove('dragging');
+    cards.forEach((card) => card.classList.remove('dragging'));
+  }
+
+  function touchMove(event) {
+    if (isDragging) {
+      const currentPosition = getPositionX(event);
+      currentTranslate = prevTranslate + currentPosition - startPos;
+    }
+  }
+
+  function getPositionX(event) {
+    return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
+  }
+
+  function animation() {
+    setSliderPosition();
+    if (isDragging) requestAnimationFrame(animation);
+  }
+
+  function setSliderPosition() {
+    track.style.transform = `translateX(${currentTranslate}px)`;
+  }
+
+  function setPositionByIndex() {
+    const cardWidth = 305;
+    currentTranslate = currentSlide * -cardWidth;
+    prevTranslate = currentTranslate;
+    setSliderPosition();
+    updateCarousel();
+  }
+
+  // Add click handlers to cards to focus them
+  cards.forEach((card, index) => {
+    card.addEventListener('click', function (e) {
+      // Don't focus if clicking the plus button
+      if (e.target.closest('.card-plus-btn')) {
+        return;
+      }
+
+      if (!isDragging) {
+        goToSlide(index);
+      }
+    });
+  });
+
+  track.addEventListener('mousedown', touchStart(0));
+  track.addEventListener('touchstart', touchStart(0));
+  track.addEventListener('mouseup', touchEnd);
+  track.addEventListener('touchend', touchEnd);
+  track.addEventListener('mouseleave', touchEnd);
+  track.addEventListener('mousemove', touchMove);
+  track.addEventListener('touchmove', touchMove);
+
+  track.addEventListener('contextmenu', function (e) {
+    e.preventDefault();
+  });
+
+  const images = track.querySelectorAll('img');
+  images.forEach((img) => {
+    img.addEventListener('dragstart', (e) => e.preventDefault());
+  });
+  window.addEventListener('load', function () {
+    updateCarousel();
+  });
+
+  updateCarousel();
+</script>
+
+
+{% schema %}
+ {
+    "name": "Carosoul with popup",
+    "settings": [],
+    "presets": [{
+        "name": "Carosoul With Popup",
+        "category": "CUSTOM SECTION-SR"
+    }]
+}
+{% endschema %}
