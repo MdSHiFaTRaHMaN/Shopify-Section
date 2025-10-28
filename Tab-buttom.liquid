@@ -1,0 +1,269 @@
+<style>
+  .main-containter {
+    background: #0a0a0a;
+    color: white;
+    padding: 40px 20px;
+  }
+
+  .container {
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  h1 {
+    font-size: 40px;
+    font-weight: 600;
+    color: white;
+  }
+
+  .main-content {
+    overflow: hidden;
+    margin-bottom: 40px;
+  }
+
+  .feature-display {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .tab-content {
+    width: 100%;
+    height: 100%;
+    display: none;
+  }
+
+  .tab-content.active {
+    display: block;
+  }
+
+  .content-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .placeholder-feature img {
+    width: 100%;
+    background-position: center;
+    background-size: cover;
+  }
+
+  .modules-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+
+  .module-card {
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+  }
+
+  .module-card > div {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .module-label {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+  }
+
+  .info-section {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    margin-top: 40px;
+  }
+
+  .info-card {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 30px;
+    border-bottom: 3px solid transparent;
+    position: relative;
+  }
+
+  .info-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .info-card.active {
+    background: rgba(255, 215, 0, 0.1);
+    border-bottom-color: #ffd700;
+  }
+
+  .info-card.active .info-header {
+    color: #ffd700;
+  }
+
+  .info-header {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #333;
+    color: white;
+    transition: color 0.3s ease;
+  }
+
+  .info-description {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #b0b0b0;
+  }
+
+  @media (max-width: 1024px) {
+    .visual-section {
+      grid-template-columns: 1fr;
+    }
+
+    .modules-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 28px;
+    }
+
+    .modules-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .info-section {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+    .info-card {
+      padding: 20px;
+    }
+  }
+</style>
+<section class="main-containter">
+  <div class="container">
+    <header>
+      <h1>Redefining Yard Care with Yarbo Core</h1>
+    </header>
+
+    <div class="main-content">
+      <div class="visual-section">
+        <div class="feature-display">
+          <!-- Tab 1: Tap, Yard Tasks Done -->
+          <div class="tab-content active" id="tab-automation">
+            <div class="content-wrapper">
+              <div class="placeholder-feature">
+                <img
+                  src="https://img-va.myshopline.com/image/store/1737714205978/Group-1960930546.png?w=2400&h=1164"
+                  alt=""
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab 2: Your Yard, Your Order -->
+          <div class="tab-content" id="tab-customization">
+            <div class="content-wrapper">
+              <div class="placeholder-feature">
+                <img
+                  src="https://img-va.myshopline.com/image/store/1737714205978/Group-1960930553-0.png?w=2800&h=1360"
+                  alt=""
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab 3: Smart Yard System Unlocked -->
+          <div class="tab-content" id="tab-modules">
+            <div class="content-wrapper">
+              <div class="placeholder-feature">
+                <img
+                  src="https://img-va.myshopline.com/image/store/1737714205978/20250407-220323.png?w=2800&h=1360"
+                  alt=""
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <div class="info-card active" data-tab="automation">
+        <div class="info-header">Tap, Yard Tasks Done</div>
+        <div class="info-description">
+          Yarbo.core takes care of everything and auto-charges itself, automating your yard work anytime, anywhere—even
+          while you're at work or enjoying a vacation.
+        </div>
+      </div>
+
+      <div class="info-card" data-tab="customization">
+        <div class="info-header">Your Yard, Your Order</div>
+        <div class="info-description">
+          Advanced algorithms tailor each task to your yard's unique needs. Customize settings for different terrains,
+          yard tasks, and thresholds where your yard gets the wonderful care.
+        </div>
+      </div>
+
+      <div class="info-card" data-tab="modules">
+        <div class="info-header">Smart Yard System Unlocked</div>
+        <div class="info-description">
+          Tow tools, attach modules, or haul with the trailer — from lawn care to driveway cleaning and more. With Yarbo
+          Core, your yard's needs are easily covered year-round.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const infoCards = document.querySelectorAll('.info-card');
+  const tabContents = document.querySelectorAll('.tab-content');
+
+  infoCards.forEach((card) => {
+    card.addEventListener('click', function () {
+      const tabName = this.getAttribute('data-tab');
+
+      infoCards.forEach((c) => c.classList.remove('active'));
+      this.classList.add('active');
+
+      tabContents.forEach((content) => content.classList.remove('active'));
+      document.getElementById(`tab-${tabName}`).classList.add('active');
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Custom Tab",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Custom Tab Section",
+      "category": "CUSTOM SECTION-SR"
+    }
+  ]
+}
+{% endschema %}
