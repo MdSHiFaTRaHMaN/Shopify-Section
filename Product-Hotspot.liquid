@@ -1,0 +1,364 @@
+<style>
+  .back-image-{{ section.id }} {
+    overflow: hidden;
+  }
+
+  .image-section-{{ section.id }} {
+    background-image: url("https://img-va.myshopline.com/image/store/1737714205978/Untitled.png?w=2000&h=1125");
+    height: 600px;
+    background-position: center;
+    background-size: cover;
+  }
+
+  .container-{{ section.id }} {
+    margin: 0 auto;
+  }
+
+  .showcase-{{ section.id }} {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    align-items: center;
+    transition: all 0.5s ease;
+    position: relative;
+  }
+
+  .showcase-{{ section.id }}.detail-active {
+    grid-template-columns: 70% 30%;
+    gap: 0;
+  }
+
+  .image-section-{{ section.id }} {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    transition: all 0.5s ease;
+  }
+
+  .product-image-{{ section.id }} {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Hotspot Styles */
+  .hotspot-{{ section.id }} {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s ease;
+  }
+
+  .hotspot-pulse-{{ section.id }} {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    animation: pulse-{{ section.id }} 2s infinite;
+  }
+
+  .hotspot-dot-{{ section.id }} {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 12px;
+    height: 12px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  }
+
+  @keyframes pulse-{{ section.id }} {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.8); opacity: 0; }
+  }
+
+  .hotspot-{{ section.id }}.active { z-index: 15; }
+  .hotspot-{{ section.id }}.hidden { opacity: 0; pointer-events: none; }
+
+  .hotspot-tooltip-{{ section.id }} {
+    position: absolute;
+    top: -50%;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    line-height: 0;
+    font-size: 20px;
+    font-weight: 400;
+  }
+
+  .hotspot-{{ section.id }}:hover .hotspot-tooltip-{{ section.id }} {
+    opacity: 1;
+  }
+
+  /* Hotspot Positions */
+  .hotspot-1-{{ section.id }} { top: 31%; left: 41%; }
+  .hotspot-2-{{ section.id }} { top: 30%; right: 40%; }
+  .hotspot-3-{{ section.id }} { bottom: 39%; left: 42.6%; }
+  .hotspot-4-{{ section.id }} { bottom: 26%; right: 36%; }
+
+  /* Detail Panel */
+  .detail-panel-{{ section.id }} {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 30%;
+    height: 100%;
+    background: #252525;
+    padding: 80px 15px;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.5s ease;
+    pointer-events: none;
+    overflow-y: auto;
+    z-index: 5;
+  }
+
+  .detail-panel-{{ section.id }}.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: all;
+  }
+
+  .detail-panel-{{ section.id }} h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+    font-weight: 600;
+    color: white;
+  }
+
+  .detail-panel-{{ section.id }} p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #ccc;
+    margin-bottom: 20px;
+  }
+
+  .visual-{{ section.id }} {
+    width: 100%;
+    aspect-ratio: 4/3;
+    margin-top: 30px;
+  }
+
+  .visual-{{ section.id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .close-btn-{{ section.id }} {
+    background: #444;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 20px;
+    transition: background 0.3s ease;
+  }
+
+  .close-btn-{{ section.id }}:hover { background: #555; }
+
+  /* Mobile */
+  .mobile-link-{{ section.id }} {
+    display: none;
+    text-align: center;
+    margin-top: 20px;
+    color: #4a9eff;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 15px;
+    background: #252525;
+    border-radius: 8px;
+  }
+
+  .mobile-detail-overlay-{{ section.id }} {
+    display: none;
+    position: fixed;
+    margin: 20px;
+    border-radius: 20px;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: #1a1a1a;
+    z-index: 1000;
+    overflow-y: auto;
+    padding: 40px 20px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .mobile-detail-overlay-{{ section.id }}.active {
+    display: block;
+    opacity: 1;
+  }
+
+  .mobile-detail-content-{{ section.id }} { max-width: 600px; margin: 0 auto; }
+  .mobile-detail-item-{{ section.id }} { background: #252525; padding: 24px; border-radius: 12px; margin-bottom: 20px; }
+  .mobile-detail-item-{{ section.id }} h3 { font-size: 20px; margin-bottom: 12px; }
+  .mobile-detail-item-{{ section.id }} p { color: #ccc; line-height: 1.6; }
+
+  .mobile-close-btn-{{ section.id }} {
+    position: fixed;
+    top: 40px;
+    right: 40px;
+    background: #444;
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 20px;
+    z-index: 1001;
+  }
+
+  @media (max-width: 768px) {
+    .showcase-{{ section.id }} { grid-template-columns: 100%; }
+    .hotspot-{{ section.id }} { display: none !important; }
+    .mobile-link-{{ section.id }} { display: block !important; }
+    .detail-panel-{{ section.id }} { display: none !important; }
+  }
+</style>
+
+<div class="back-image-{{ section.id }}">
+  <div class="container-{{ section.id }}">
+    <div class="showcase-{{ section.id }}" id="showcase-{{ section.id }}">
+      <div class="image-section-{{ section.id }}">
+        <div class="hotspot-{{ section.id }} hotspot-1-{{ section.id }}" data-feature="battery">
+          <div class="hotspot-pulse-{{ section.id }}"></div>
+          <div class="hotspot-dot-{{ section.id }}"></div>
+          <div class="hotspot-tooltip-{{ section.id }}">Long-Lasting Battery</div>
+        </div>
+        <div class="hotspot-{{ section.id }} hotspot-2-{{ section.id }}" data-feature="motor">
+          <div class="hotspot-pulse-{{ section.id }}"></div>
+          <div class="hotspot-dot-{{ section.id }}"></div>
+          <div class="hotspot-tooltip-{{ section.id }}">Powerful Motor System</div>
+        </div>
+        <div class="hotspot-{{ section.id }} hotspot-3-{{ section.id }}" data-feature="sensors">
+          <div class="hotspot-pulse-{{ section.id }}"></div>
+          <div class="hotspot-dot-{{ section.id }}"></div>
+          <div class="hotspot-tooltip-{{ section.id }}">Advanced Sensors</div>
+        </div>
+        <div class="hotspot-{{ section.id }} hotspot-4-{{ section.id }}" data-feature="chassis">
+          <div class="hotspot-pulse-{{ section.id }}"></div>
+          <div class="hotspot-dot-{{ section.id }}"></div>
+          <div class="hotspot-tooltip-{{ section.id }}">Durable Chassis</div>
+        </div>
+      </div>
+
+      <div class="detail-panel-{{ section.id }}" id="detailPanel-{{ section.id }}">
+        <h2 id="detailTitle-{{ section.id }}">Long-Lasting Battery</h2>
+        <p id="detailDescription-{{ section.id }}">
+          With up to 4 hours of continuous operation per charge, Yarbo is ideal for large yards, minimizing interruptions and maximizing efficiency.
+        </p>
+        <div class="visual-{{ section.id }}">
+          <img src="https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=400&h=300&fit=crop" alt="Battery Detail" id="detailImage-{{ section.id }}">
+        </div>
+        <button class="close-btn-{{ section.id }}" id="closeBtn-{{ section.id }}">Close</button>
+      </div>
+    </div>
+
+    <div class="mobile-link-{{ section.id }}" id="mobileLink-{{ section.id }}">View All Features →</div>
+  </div>
+</div>
+
+<div class="mobile-detail-overlay-{{ section.id }}" id="mobileOverlay-{{ section.id }}">
+  <button class="mobile-close-btn-{{ section.id }}" id="mobileCloseBtn-{{ section.id }}">×</button>
+  <div class="mobile-detail-content-{{ section.id }}">
+    <h2>Product Features</h2>
+    {% for feature in (1..4) %}
+      <div class="mobile-detail-item-{{ section.id }}">
+        <h3>{{ 'Feature ' | append: feature }}</h3>
+        <p>Feature description {{ feature }} goes here.</p>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+  (() => {
+    const sectionId = '{{ section.id }}';
+    const features = {
+      battery: {
+        title: 'Long-Lasting Battery',
+        description: 'With up to 4 hours of continuous operation per charge, Yarbo is ideal for large yards, minimizing interruptions and maximizing efficiency.',
+        image: 'https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=400&h=300&fit=crop',
+      },
+      motor: {
+        title: 'Powerful Motor System',
+        description: 'Equipped with high-torque motors that deliver exceptional performance across all terrains, ensuring consistent power output even in challenging conditions.',
+        image: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&h=300&fit=crop',
+      },
+      sensors: {
+        title: 'Advanced Sensors',
+        description: 'Intelligent sensor array provides 360-degree awareness, enabling precise navigation and obstacle avoidance for safe autonomous operation.',
+        image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&h=300&fit=crop',
+      },
+      chassis: {
+        title: 'Durable Chassis',
+        description: 'Reinforced all-weather chassis design withstands harsh outdoor conditions, providing reliable performance year-round with minimal maintenance.',
+        image: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=400&h=300&fit=crop',
+      },
+    };
+
+    const showcase = document.getElementById(`showcase-${sectionId}`);
+    const detailPanel = document.getElementById(`detailPanel-${sectionId}`);
+    const detailTitle = document.getElementById(`detailTitle-${sectionId}`);
+    const detailDescription = document.getElementById(`detailDescription-${sectionId}`);
+    const detailImage = document.getElementById(`detailImage-${sectionId}`);
+    const closeBtn = document.getElementById(`closeBtn-${sectionId}`);
+    const hotspots = document.querySelectorAll(`.hotspot-${sectionId}`);
+    const mobileLink = document.getElementById(`mobileLink-${sectionId}`);
+    const mobileOverlay = document.getElementById(`mobileOverlay-${sectionId}`);
+    const mobileCloseBtn = document.getElementById(`mobileCloseBtn-${sectionId}`);
+
+    hotspots.forEach(h => {
+      h.addEventListener('click', () => {
+        const data = features[h.dataset.feature];
+        detailTitle.textContent = data.title;
+        detailDescription.textContent = data.description;
+        detailImage.src = data.image;
+        detailPanel.classList.add('active');
+        showcase.classList.add('detail-active');
+        hotspots.forEach(el => el.classList.toggle('hidden', el !== h));
+      });
+    });
+
+    closeBtn.addEventListener('click', () => {
+      detailPanel.classList.remove('active');
+      showcase.classList.remove('detail-active');
+      hotspots.forEach(h => h.classList.remove('hidden', 'active'));
+    });
+
+    mobileLink.addEventListener('click', () => {
+      mobileOverlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+
+    mobileCloseBtn.addEventListener('click', () => {
+      mobileOverlay.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Yerbo Drawer Section",
+  "settings": [],
+  "presets": [
+    { "name": "Yerbo Drawer", "category": "Custom Sections" }
+  ]
+}
+{% endschema %}
