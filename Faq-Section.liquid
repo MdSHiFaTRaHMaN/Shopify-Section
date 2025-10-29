@@ -1,0 +1,371 @@
+{% comment %}
+  FAQ Accordion Section
+  Displays an accordion-style FAQ with customizable questions and answers
+{% endcomment %}
+
+<style>
+  .faq-accordion-section {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 40px 20px;
+    background-color: #FFFFFF;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    box-sizing: border-box;
+  }
+
+  .faq-accordion-section .faq-section {
+    max-width: 1200px;
+    width: 100%;
+    padding: 20px 0;
+  }
+
+  .faq-accordion-section .section-title {
+    text-align: center;
+    font-size: 2em;
+    font-weight: 600;
+    margin-bottom: 30px;
+    color: #333;
+  }
+
+  /* Accordion Item Styling */
+  .faq-accordion-section .accordion-item {
+    margin-bottom: 15px;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #F5F5F7;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .faq-accordion-section .accordion-item.active {
+    box-shadow: 0 0 0 1px #007bff, 0 4px 12px rgba(0, 0, 0, 0.05);
+    background-color: #e0f2ff;
+  }
+
+  /* Question Header */
+  .faq-accordion-section .accordion-header {
+    padding: 20px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.1em;
+    font-weight: 500;
+    color: #333;
+    transition: color 0.3s ease-in-out;
+    gap: 12px;
+    user-select: none;
+  }
+
+  .faq-accordion-section .accordion-header:hover {
+    color: #007bff;
+  }
+
+  .faq-accordion-section .accordion-item.active .accordion-header {
+    color: #007bff;
+  }
+
+  /* Chevron icon */
+  .faq-accordion-section .chevron-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    background-size: 16px 16px;
+    background-repeat: no-repeat;
+    background-position: center;
+    flex-shrink: 0;
+  }
+
+  /* Closed state */
+  .faq-accordion-section .accordion-item:not(.active) .chevron-icon {
+    background-color: white;
+    border: 1px solid #dcdcdc;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23007bff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>');
+    transform: rotate(0deg);
+  }
+
+  /* Open state */
+  .faq-accordion-section .accordion-item.active .chevron-icon {
+    background-color: #007bff;
+    border: none;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+    transform: rotate(0deg);
+  }
+
+  /* Accordion content */
+  .faq-accordion-section .accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                padding 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease-in-out;
+    padding: 0 20px;
+    opacity: 0;
+  }
+
+  .faq-accordion-section .accordion-item.active .accordion-content {
+    padding-bottom: 20px;
+    opacity: 1;
+  }
+
+  .faq-accordion-section .accordion-content p {
+    margin: 0;
+    font-size: 1em;
+    line-height: 1.5;
+    color: #666;
+    padding-top: 5px;
+  }
+
+  /* Footer */
+  .faq-accordion-section .footer-contact {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 0.9em;
+    color: #666;
+  }
+
+  .faq-accordion-section .footer-contact a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease-in-out;
+  }
+
+  .faq-accordion-section .footer-contact a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+  }
+
+  /* RESPONSIVE DESIGN */
+  @media (max-width: 768px) {
+    .faq-accordion-section {
+      padding: 20px 10px;
+    }
+
+    .faq-accordion-section .faq-section {
+      width: 100%;
+    }
+
+    .faq-accordion-section .section-title {
+      font-size: 1.6em;
+      margin-bottom: 25px;
+    }
+
+    .faq-accordion-section .accordion-header {
+      font-size: 1em;
+      padding: 16px;
+      gap: 10px;
+    }
+
+    .faq-accordion-section .chevron-icon {
+      width: 30px;
+      height: 30px;
+      background-size: 14px 14px;
+    }
+
+    .faq-accordion-section .accordion-content {
+      padding: 0 16px;
+    }
+
+    .faq-accordion-section .accordion-content p {
+      font-size: 0.95em;
+    }
+
+    .faq-accordion-section .footer-contact {
+      font-size: 0.85em;
+      margin-top: 25px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .faq-accordion-section .section-title {
+      font-size: 1.4em;
+    }
+
+    .faq-accordion-section .accordion-header {
+      font-size: 0.95em;
+    }
+
+    .faq-accordion-section .chevron-icon {
+      width: 28px;
+      height: 28px;
+      background-size: 12px 12px;
+    }
+  }
+</style>
+
+<div class="faq-accordion-section" id="faq-section-{{ section.id }}">
+  <div class="faq-section">
+    <h1 class="section-title">{{ section.settings.section_title }}</h1>
+
+    {% for block in section.blocks %}
+      {% if block.type == 'faq_item' %}
+        <div class="accordion-item" data-faq-item {{ block.shopify_attributes }}>
+          <div class="accordion-header" data-faq-header>
+            {{ block.settings.question }}
+            <div class="chevron-icon"></div>
+          </div>
+          <div class="accordion-content" data-faq-content>
+            <p>{{ block.settings.answer }}</p>
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+
+    {% if section.settings.show_footer %}
+      <div class="footer-contact">
+        {{ section.settings.footer_text }}
+        {% if section.settings.footer_link_text != blank and section.settings.footer_link_url != blank %}
+          <a href="{{ section.settings.footer_link_url }}">{{ section.settings.footer_link_text }}</a>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+(function() {
+  const sectionId = 'faq-section-{{ section.id }}';
+  const section = document.getElementById(sectionId);
+  
+  if (!section) return;
+
+  const accordionItems = section.querySelectorAll('[data-faq-item]');
+
+  accordionItems.forEach(item => {
+    const header = item.querySelector('[data-faq-header]');
+    const content = item.querySelector('[data-faq-content]');
+
+    header.addEventListener('click', function() {
+      const isActive = item.classList.contains('active');
+      
+      // Close all other accordion items
+      accordionItems.forEach(otherItem => {
+        if (otherItem !== item && otherItem.classList.contains('active')) {
+          otherItem.classList.remove('active');
+          const otherContent = otherItem.querySelector('[data-faq-content]');
+          otherContent.style.maxHeight = null;
+        }
+      });
+
+      // Toggle current item
+      item.classList.toggle('active');
+      
+      if (!isActive) {
+        content.style.maxHeight = content.scrollHeight + 30 + 'px';
+      } else {
+        content.style.maxHeight = null;
+      }
+    });
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "FAQ Accordion",
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section Title",
+      "default": "Frequently Asked Questions"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_footer",
+      "label": "Show Footer Contact",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "footer_text",
+      "label": "Footer Text",
+      "default": "Still have questions?"
+    },
+    {
+      "type": "text",
+      "id": "footer_link_text",
+      "label": "Footer Link Text",
+      "default": "Get help from our team."
+    },
+    {
+      "type": "url",
+      "id": "footer_link_url",
+      "label": "Footer Link URL"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq_item",
+      "name": "FAQ Item",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "question",
+          "label": "Question",
+          "default": "Your question here?"
+        },
+        {
+          "type": "textarea",
+          "id": "answer",
+          "label": "Answer",
+          "default": "Your answer here."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ Accordion",
+      "blocks": [
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "How to set up my iGarden pool cleaner K Series for the first use?",
+            "answer": "Turn the power switch at the bottom to \"ON\" before use, and switch it off if not used for a long time."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "How to connect my iGarden pool cleaner K Series to the Internet?",
+            "answer": "Please ensure your mobile device is connected to a 2.4GHz Wi-Fi network. Open the iGarden app and follow the on-screen instructions to pair the device."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "Why can't my iGarden pool cleaner K Series connect to the device underwater?",
+            "answer": "Wi-Fi signals do not penetrate water effectively. The connection process must be completed before the cleaner is submerged. The device operates autonomously underwater after the initial setup."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "Which pool is the iGarden pool cleaner K Series suitable for?",
+            "answer": "The K Series is suitable for most in-ground and above-ground pools up to 50ft in length, including concrete, vinyl, and fiberglass surfaces."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "How should I clean the filter basket?",
+            "answer": "Remove the debris basket from the cleaner. Use a standard garden hose to rinse the contents and the mesh filter. Ensure it is completely dry before reinserting."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
