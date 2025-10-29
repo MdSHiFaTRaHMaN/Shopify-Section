@@ -7,3 +7,7 @@
 ##  Product-Hotspot Section
 
 <img width="1889" height="454" alt="image" src="https://github.com/user-attachments/assets/4af4633f-ecec-4cd4-a1d0-0b4af7b05bc2" />
+
+##  FAQ Section 
+
+<img width="1694" height="858" alt="image" src="https://github.com/user-attachments/assets/fce7da87-1139-4bf3-9ed6-fa2dc9e336ec" />
