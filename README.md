@@ -11,3 +11,7 @@
 ##  FAQ Section 
 
 <img width="1694" height="858" alt="image" src="https://github.com/user-attachments/assets/fce7da87-1139-4bf3-9ed6-fa2dc9e336ec" />
+
+##  divider Section
+
+<img width="1904" height="157" alt="image" src="https://github.com/user-attachments/assets/dc326c3c-a949-491a-bc21-77b9c7949acf" />
