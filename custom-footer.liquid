@@ -1,0 +1,807 @@
+{% comment %}
+  Footer Section - Fully Customizable and Responsive with Menu Selection
+{% endcomment %}
+
+{{ 'section-footer.css' | asset_url | stylesheet_tag }}
+
+<footer class="footer" style="background-color: {{ section.settings.bg_color }}; color: {{ section.settings.text_color }};">
+  <div class="footer__container">
+    
+    {%- comment -%} Desktop Layout {%- endcomment -%}
+    <div class="footer__desktop">
+      <div class="footer__grid">
+        
+        {%- comment -%} Column 1: Menu 1 {%- endcomment -%}
+        {%- if section.settings.show_column_1 and section.settings.menu_1 != blank -%}
+        <div class="footer__column">
+          <h3 class="footer__title">{{ section.settings.column_1_title }}</h3>
+          <ul class="footer__list">
+            {%- for link in linklists[section.settings.menu_1].links -%}
+              <li>
+                <a href="{{ link.url }}" class="footer__link">
+                  {{ link.title }}
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+        {%- endif -%}
+
+        {%- comment -%} Column 2: Menu 2 {%- endcomment -%}
+        {%- if section.settings.show_column_2 and section.settings.menu_2 != blank -%}
+        <div class="footer__column">
+          <h3 class="footer__title">{{ section.settings.column_2_title }}</h3>
+          <ul class="footer__list">
+            {%- for link in linklists[section.settings.menu_2].links -%}
+              <li>
+                <a href="{{ link.url }}" class="footer__link">
+                  {{ link.title }}
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+        {%- endif -%}
+
+        {%- comment -%} Column 3: Menu 3 {%- endcomment -%}
+        {%- if section.settings.show_column_3 and section.settings.menu_3 != blank -%}
+        <div class="footer__column">
+          <h3 class="footer__title">{{ section.settings.column_3_title }}</h3>
+          <ul class="footer__list">
+            {%- for link in linklists[section.settings.menu_3].links -%}
+              <li>
+                <a href="{{ link.url }}" class="footer__link">
+                  {{ link.title }}
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+        {%- endif -%}
+
+        {%- comment -%} Column 4: Get in Touch {%- endcomment -%}
+        {%- if section.settings.show_column_4 -%}
+        <div class="footer__column">
+          <h3 class="footer__title">{{ section.settings.column_4_title }}</h3>
+          <ul class="footer__list footer__contact">
+            {%- if section.settings.show_phone -%}
+            <li class="footer__contact-item">
+              <span class="footer__icon"> <svg width="16" height="16" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon icon--phone" role="presentation"><path d="M5.09 7.22a9.436 9.436 0 0 0 4.12 4.12l1.374-1.376a.627.627 0 0 1 .638-.156c.7.231 1.45.356 2.231.356a.625.625 0 0 1 .625.625v2.188a.625.625 0 0 1-.625.625A10.625 10.625 0 0 1 2.828 2.977a.625.625 0 0 1 .625-.625h2.188a.625.625 0 0 1 .625.625 7.1 7.1 0 0 0 .356 2.23.627.627 0 0 1-.156.638L5.09 7.22Z" fill="currentColor"></path></svg></span>
+              <div>
+                <div>{{ section.settings.phone_label }}</div>
+                <a href="tel:{{ section.settings.phone_number | replace: ' ', '' | replace: '(', '' | replace: ')', '' }}" class="footer__link">
+                  {{ section.settings.phone_number }}
+                </a>
+              </div>
+            </li>
+            {%- endif -%}
+            
+            {%- if section.settings.show_whatsapp -%}
+            <li class="footer__contact-item">
+              <span class="footer__icon"><svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon icon--whatsapp" role="presentation"><path d="M8.027 1.715c-3.64 0-6.606 2.967-6.606 6.607 0 1.166.306 2.3.88 3.3l-.934 3.426 3.5-.92a6.61 6.61 0 0 0 3.16.807c3.64 0 6.607-2.967 6.607-6.607A6.565 6.565 0 0 0 12.7 3.655a6.544 6.544 0 0 0-4.673-1.94Zm.007 1.113c1.467 0 2.84.574 3.88 1.614a5.483 5.483 0 0 1 1.607 3.886c0 3.027-2.467 5.487-5.494 5.487-.986 0-1.953-.26-2.793-.767l-.2-.113-2.08.546.553-2.026-.133-.213a5.458 5.458 0 0 1-.84-2.92 5.508 5.508 0 0 1 5.5-5.494Zm-2.347 2.44a.609.609 0 0 0-.44.207c-.146.167-.58.573-.58 1.38 0 .813.594 1.593.667 1.707.093.113 1.173 1.78 2.833 2.486.394.18.7.28.94.354.394.126.754.106 1.04.066.32-.046.973-.4 1.114-.787.14-.386.14-.713.1-.786-.047-.067-.154-.107-.32-.18-.167-.093-.98-.493-1.127-.547-.153-.053-.247-.08-.373.08-.107.167-.427.54-.52.647-.1.113-.194.127-.354.047-.173-.087-.706-.26-1.333-.82-.493-.44-.82-.98-.92-1.147-.08-.16-.007-.26.073-.333a2.2 2.2 0 0 0 .247-.294c.087-.093.113-.166.167-.273.053-.113.026-.207-.014-.287-.04-.073-.373-.9-.513-1.226-.133-.32-.267-.28-.373-.287-.094 0-.2-.007-.314-.007Z" fill="currentColor"></path></svg></span>
+              <div>
+                <div>{{ section.settings.whatsapp_label }}</div>
+                <a href="https://wa.me/{{ section.settings.whatsapp_number | replace: ' ', '' | replace: '(', '' | replace: ')', '' | replace: '+', '' }}" class="footer__link" target="_blank">
+                  {{ section.settings.whatsapp_number }}
+                </a>
+              </div>
+            </li>
+            {%- endif -%}
+            
+            {%- if section.settings.show_email -%}
+            <li class="footer__contact-item">
+              <span class="footer__icon"><svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon icon--email" role="presentation"><path d="M14.068 4.241 8.048.475 2.028 4.24a1.327 1.327 0 0 0-.647 1.14v6.667c0 .733.6 1.333 1.333 1.333h10.667c.733 0 1.333-.6 1.333-1.333V5.38c0-.486-.26-.906-.646-1.14Zm-.687 7.807H2.714V6.715l5.334 3.333 5.333-3.333v5.333ZM8.048 8.715 2.714 5.38l5.334-3.333L13.38 5.38 8.048 8.715Z" fill="currentColor"></path></svg></span>
+              <div>
+                <div>{{ section.settings.email_label }}</div>
+                <a href="mailto:{{ section.settings.email_address }}" class="footer__link">
+                  {{ section.settings.email_address }}
+                </a>
+              </div>
+            </li>
+            {%- endif -%}
+          </ul>
+        </div>
+        {%- endif -%}
+
+        {%- comment -%} Column 5: Newsletter {%- endcomment -%}
+        {%- if section.settings.show_newsletter -%}
+        <div class="footer__column footer__newsletter">
+          <h3 class="footer__title">{{ section.settings.newsletter_title }}</h3>
+          <p class="footer__newsletter-text">{{ section.settings.newsletter_text }}</p>
+          
+          <form method="post" action="/contact#contact_form" class="footer__newsletter-form" accept-charset="UTF-8">
+            <input type="hidden" name="form_type" value="customer">
+            <input type="hidden" name="utf8" value="✓">
+            <input type="hidden" name="contact[tags]" value="newsletter">
+            
+            <div class="footer__newsletter-input-wrapper">
+              <input 
+                type="email" 
+                name="contact[email]" 
+                placeholder="{{ section.settings.newsletter_placeholder }}"
+                class="footer__newsletter-input"
+                required
+              >
+              <button 
+                type="submit" 
+                class="footer__newsletter-button"
+                style="background-color: {{ section.settings.button_bg_color }}; color: {{ section.settings.button_text_color }};"
+              >
+                {{ section.settings.button_text }}
+              </button>
+            </div>
+          </form>
+
+          {%- if section.settings.show_social -%}
+          <div class="footer__social">
+            <p class="footer__social-title">{{ section.settings.social_title }}</p>
+            <div class="footer__social-icons">
+              {%- for block in section.blocks -%}
+                {%- if block.type == 'social_link' -%}
+                  <a href="{{ block.settings.link }}" class="footer__social-link" target="_blank" rel="noopener">
+                    {{ block.settings.icon }}
+                  </a>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          </div>
+          {%- endif -%}
+        </div>
+        {%- endif -%}
+
+      </div>
+    </div>
+
+    {%- comment -%} Mobile Layout {%- endcomment -%}
+    <div class="footer__mobile">
+      
+      {%- if section.settings.show_newsletter -%}
+      <div class="footer__mobile-newsletter">
+        <h3 class="footer__title">{{ section.settings.newsletter_title }}</h3>
+        <p class="footer__newsletter-text">{{ section.settings.newsletter_text }}</p>
+        
+        <form method="post" action="/contact#contact_form" class="footer__newsletter-form" accept-charset="UTF-8">
+          <input type="hidden" name="form_type" value="customer">
+          <input type="hidden" name="utf8" value="✓">
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          
+          <div class="footer__newsletter-input-wrapper">
+            <input 
+              type="email" 
+              name="contact[email]" 
+              placeholder="{{ section.settings.newsletter_placeholder }}"
+              class="footer__newsletter-input"
+              required
+            >
+            <button 
+              type="submit" 
+              class="footer__newsletter-button"
+              style="background-color: {{ section.settings.button_bg_color }}; color: {{ section.settings.button_text_color }};"
+            >
+              {{ section.settings.button_text }}
+            </button>
+          </div>
+        </form>
+      </div>
+      {%- endif -%}
+
+      {%- comment -%} Collapsible Menu 1 {%- endcomment -%}
+      {%- if section.settings.show_column_1 and section.settings.menu_1 != blank -%}
+      <details class="footer__accordion">
+        <summary class="footer__accordion-title">
+          {{ section.settings.column_1_title }}
+          <span class="footer__accordion-icon">▼</span>
+        </summary>
+        <ul class="footer__list">
+          {%- for link in linklists[section.settings.menu_1].links -%}
+            <li>
+              <a href="{{ link.url }}" class="footer__link">
+                {{ link.title }}
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </details>
+      {%- endif -%}
+
+      {%- comment -%} Collapsible Menu 2 {%- endcomment -%}
+      {%- if section.settings.show_column_2 and section.settings.menu_2 != blank -%}
+      <details class="footer__accordion">
+        <summary class="footer__accordion-title">
+          {{ section.settings.column_2_title }}
+          <span class="footer__accordion-icon">▼</span>
+        </summary>
+        <ul class="footer__list">
+          {%- for link in linklists[section.settings.menu_2].links -%}
+            <li>
+              <a href="{{ link.url }}" class="footer__link">
+                {{ link.title }}
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </details>
+      {%- endif -%}
+
+      {%- comment -%} Collapsible Menu 3 {%- endcomment -%}
+      {%- if section.settings.show_column_3 and section.settings.menu_3 != blank -%}
+      <details class="footer__accordion">
+        <summary class="footer__accordion-title">
+          {{ section.settings.column_3_title }}
+          <span class="footer__accordion-icon">▼</span>
+        </summary>
+        <ul class="footer__list">
+          {%- for link in linklists[section.settings.menu_3].links -%}
+            <li>
+              <a href="{{ link.url }}" class="footer__link">
+                {{ link.title }}
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </details>
+      {%- endif -%}
+
+      {%- comment -%} Collapsible Get in Touch {%- endcomment -%}
+      {%- if section.settings.show_column_4 -%}
+      <details class="footer__accordion">
+        <summary class="footer__accordion-title">
+          {{ section.settings.column_4_title }}
+          <span class="footer__accordion-icon">▼</span>
+        </summary>
+        <ul class="footer__list footer__contact">
+          {%- if section.settings.show_phone -%}
+          <li class="footer__contact-item">
+            <span class="footer__icon">{{ section.settings.phone_icon }}</span>
+            <div>
+              <div>{{ section.settings.phone_label }}</div>
+              <a href="tel:{{ section.settings.phone_number | replace: ' ', '' | replace: '(', '' | replace: ')', '' }}" class="footer__link">
+                {{ section.settings.phone_number }}
+              </a>
+            </div>
+          </li>
+          {%- endif -%}
+          
+          {%- if section.settings.show_whatsapp -%}
+          <li class="footer__contact-item">
+            <span class="footer__icon">{{ section.settings.whatsapp_icon }}</span>
+            <div>
+              <div>{{ section.settings.whatsapp_label }}</div>
+              <a href="https://wa.me/{{ section.settings.whatsapp_number | replace: ' ', '' | replace: '(', '' | replace: ')', '' | replace: '+', '' }}" class="footer__link" target="_blank">
+                {{ section.settings.whatsapp_number }}
+              </a>
+            </div>
+          </li>
+          {%- endif -%}
+          
+          {%- if section.settings.show_email -%}
+          <li class="footer__contact-item">
+            <span class="footer__icon">{{ section.settings.email_icon }}</span>
+            <div>
+              <div>{{ section.settings.email_label }}</div>
+              <a href="mailto:{{ section.settings.email_address }}" class="footer__link">
+                {{ section.settings.email_address }}
+              </a>
+            </div>
+          </li>
+          {%- endif -%}
+        </ul>
+      </details>
+      {%- endif -%}
+
+      {%- if section.settings.show_social -%}
+      <div class="footer__mobile-social">
+        <p class="footer__social-title">{{ section.settings.social_title }}</p>
+        <div class="footer__social-icons">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'social_link' -%}
+              <a href="{{ block.settings.link }}" class="footer__social-link" target="_blank" rel="noopener">
+                {{ block.settings.icon }}
+              </a>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+      {%- endif -%}
+
+    </div>
+
+  </div>
+</footer>
+
+<style>
+.footer {
+  padding: 80px 20px;
+}
+
+.footer__container {
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+/* Desktop Layout */
+.footer__desktop {
+  display: block;
+}
+
+.footer__mobile {
+  display: none;
+}
+
+.footer__grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+}
+
+.footer__column {
+  min-width: 0;
+}
+
+.footer__title {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin: 0 0 20px 0;
+}
+
+.footer__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer__list li {
+  margin-bottom: 12px;
+}
+
+.footer__link {
+  color: inherit;
+  text-decoration: none;
+  font-size: 16px;
+  line-height: 1.6;
+  transition: opacity 0.2s;
+}
+
+.footer__link:hover {
+  opacity: 0.7;
+}
+
+.footer__contact-item {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.footer__icon {
+  font-size: 18px;
+  margin-top: 2px;
+}
+
+.footer__newsletter-text {
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0 0 20px 0;
+}
+
+.footer__newsletter-form {
+  margin-bottom: 30px;
+}
+
+.footer__newsletter-input-wrapper {
+  display: flex;
+  gap: 0;
+}
+
+.footer__newsletter-input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: transparent;
+  font-size: 14px;
+  color: inherit;
+}
+
+.footer__newsletter-input::placeholder {
+  color: inherit;
+  opacity: 0.6;
+}
+
+.footer__newsletter-button {
+  padding: 12px 24px;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: opacity 0.2s;
+  white-space: nowrap;
+}
+
+.footer__newsletter-button:hover {
+  opacity: 0.9;
+}
+
+.footer__social {
+  margin-top: 30px;
+}
+
+.footer__social-title {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin: 0 0 15px 0;
+}
+
+.footer__social-icons {
+  display: flex;
+  gap: 20px;
+}
+
+.footer__social-link {
+  color: inherit;
+  font-size: 20px;
+  transition: opacity 0.2s;
+}
+
+.footer__social-link:hover {
+  opacity: 0.7;
+}
+
+a.footer__social-link img {
+    width: 25px;
+}
+
+/* Mobile Layout */
+@media (max-width: 768px) {
+  .footer {
+    padding: 40px 20px;
+  }
+
+  .footer__desktop {
+    display: none;
+  }
+
+  .footer__mobile {
+    display: block;
+  }
+
+  .footer__mobile-newsletter {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .footer__newsletter-input-wrapper {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .footer__newsletter-input,
+  .footer__newsletter-button {
+    width: 100%;
+  }
+
+  .footer__accordion {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 20px 0;
+  }
+
+  .footer__accordion-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    list-style: none;
+  }
+
+  .footer__accordion-title::-webkit-details-marker {
+    display: none;
+  }
+
+  .footer__accordion[open] .footer__accordion-icon {
+    transform: rotate(180deg);
+  }
+
+  .footer__accordion-icon {
+    font-size: 10px;
+    transition: transform 0.3s;
+  }
+
+  .footer__accordion .footer__list {
+    margin-top: 15px;
+  }
+
+  .footer__mobile-social {
+    text-align: center;
+    padding: 30px 0;
+  }
+
+  .footer__social-icons {
+    justify-content: center;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .footer__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .footer__newsletter {
+    grid-column: span 3;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#E8DDD3"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Column 1"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_column_1",
+      "label": "Show Column 1",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "column_1_title",
+      "label": "Column 1 Title",
+      "default": "DELIVERY & RETURNS"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_1",
+      "label": "Select Menu for Column 1",
+      "info": "Choose a menu from Navigation"
+    },
+    {
+      "type": "header",
+      "content": "Column 2"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_column_2",
+      "label": "Show Column 2",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "column_2_title",
+      "label": "Column 2 Title",
+      "default": "ABOUT US"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_2",
+      "label": "Select Menu for Column 2",
+      "info": "Choose a menu from Navigation"
+    },
+    {
+      "type": "header",
+      "content": "Column 3"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_column_3",
+      "label": "Show Column 3",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "column_3_title",
+      "label": "Column 3 Title",
+      "default": "CUSTOMER CARE"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_3",
+      "label": "Select Menu for Column 3",
+      "info": "Choose a menu from Navigation"
+    },
+    {
+      "type": "header",
+      "content": "Column 4 - Get in Touch"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_column_4",
+      "label": "Show Column 4",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "column_4_title",
+      "label": "Column 4 Title",
+      "default": "GET IN TOUCH"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_phone",
+      "label": "Show Phone",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "phone_icon",
+      "label": "Phone Icon",
+      "default": "📞"
+    },
+    {
+      "type": "text",
+      "id": "phone_label",
+      "label": "Phone Label",
+      "default": "Call us Mon-Fri 10am-3pm"
+    },
+    {
+      "type": "text",
+      "id": "phone_number",
+      "label": "Phone Number",
+      "default": "+44 (0) 203 823 7768"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_whatsapp",
+      "label": "Show WhatsApp",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_icon",
+      "label": "WhatsApp Icon",
+      "default": "💬"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_label",
+      "label": "WhatsApp Label",
+      "default": "Talk to us on Whatsapp"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_number",
+      "label": "WhatsApp Number",
+      "default": "+44 (0) 203 823 7768"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_email",
+      "label": "Show Email",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "email_icon",
+      "label": "Email Icon",
+      "default": "✉️"
+    },
+    {
+      "type": "text",
+      "id": "email_label",
+      "label": "Email Label",
+      "default": "Email us"
+    },
+    {
+      "type": "text",
+      "id": "email_address",
+      "label": "Email Address",
+      "default": "admin@aabcollection.com"
+    },
+    {
+      "type": "header",
+      "content": "Newsletter"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_newsletter",
+      "label": "Show Newsletter",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "newsletter_title",
+      "label": "Newsletter Title",
+      "default": "JOIN OUR COMMUNITY"
+    },
+    {
+      "type": "textarea",
+      "id": "newsletter_text",
+      "label": "Newsletter Text",
+      "default": "Exclusive offers and sneak peeks are reserved for those on our mailing list."
+    },
+    {
+      "type": "text",
+      "id": "newsletter_placeholder",
+      "label": "Input Placeholder",
+      "default": "ENTER YOUR EMAIL"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "SIGN UP"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Button Background Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button Text Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Social Media"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social",
+      "label": "Show Social Media",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "social_title",
+      "label": "Social Title",
+      "default": "FOLLOW US"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "social_link",
+      "name": "Social Link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icon (emoji or HTML)",
+          "default": "📱",
+          "info": "You can use emojis or HTML icon code"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer",
+      "category": "Footer"
+    }
+  ]
+}
+{% endschema %}
