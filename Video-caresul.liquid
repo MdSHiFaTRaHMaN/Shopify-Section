@@ -1,0 +1,530 @@
+{% schema %}
+{
+  "name": "Video Carousel",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_header",
+      "label": "Show Header",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading Text",
+      "default": "Shop styles from our latest content!"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading Text",
+      "default": "@hypmiami"
+    },
+    {
+      "type": "header",
+      "content": "Card Layout"
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Card Border Radius",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Gap Between Cards",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Cards Per View"
+    },
+    {
+      "type": "paragraph",
+      "content": "Select how many cards to show at once. Use decimals (e.g., 1.5, 3.5) to show part of the next card."
+    },
+    {
+      "type": "range",
+      "id": "mobile_cards",
+      "min": 1.0,
+      "max": 3.0,
+      "step": 0.1,
+      "label": "Cards on Mobile",
+      "default": 1.2
+    },
+    {
+      "type": "range",
+      "id": "desktop_cards",
+      "min": 1.5,
+      "max": 6.0,
+      "step": 0.5,
+      "label": "Cards on Desktop",
+      "default": 4.5
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_nav",
+      "label": "Show Desktop Navigation Arrows",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "video_card",
+      "name": "Video",
+      "settings": [
+        {
+          "type": "video",
+          "id": "shopify_video",
+          "label": "Shopify Video",
+          "info": "Upload a video directly to Shopify."
+        },
+        {
+          "type": "text",
+          "id": "external_video",
+          "label": "External Video URL (MP4)",
+          "info": "Paste a link here if you are not using a Shopify video."
+        },
+        {
+          "type": "image_picker",
+          "id": "poster_image",
+          "label": "Cover Image (Poster)",
+          "info": "Shown before the video plays."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video Carousel",
+      "blocks": [
+        { "type": "video_card" },
+        { "type": "video_card" },
+        { "type": "video_card" }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+{% style %}
+  /* Scoped CSS Variables based on settings */
+  #shopify-section-{{ section.id }} {
+    --vc-gap: {{ section.settings.gap }}px;
+    --vc-radius: {{ section.settings.card_radius }}px;
+    
+    /* Number of cards to show */
+    --vc-count-mobile: {{ section.settings.mobile_cards }};
+    --vc-count-desktop: {{ section.settings.desktop_cards }};
+  }
+
+  .vc-wrapper * {
+    box-sizing: border-box;
+  }
+
+  .vc-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 40px 0; /* Removing side padding here to let cards control width */
+    font-family: inherit;
+    position: relative;
+    overflow: hidden; /* Prevent horizontal scroll on body */
+  }
+
+  /* Header */
+  .vc-header {
+    text-align: center;
+    margin-bottom: 24px;
+    padding: 0 20px;
+  }
+  .vc-header h2 {
+    font-size: 38px;
+    font-weight: 400;
+    margin: 0 0 8px 0;
+    line-height: 1.2;
+  }
+  .vc-header p {
+    font-size: 16px;
+    color: #666;
+    margin: 0;
+  }
+
+  /* Track / Slider */
+  .vc-track {
+    display: flex;
+    overflow-x: auto;
+    gap: var(--vc-gap);
+    /* Padding matches gap to ensure first item isn't flush with edge if desired, or kept 0 */
+    padding: 20px 20px; 
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    
+    /* Hide Scrollbar */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+  }
+  .vc-track::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+  }
+
+  /* Video Card */
+  .video-card {
+    position: relative;
+    flex: 0 0 auto;
+    background: #000;
+    border-radius: var(--vc-radius);
+    overflow: hidden;
+    cursor: pointer;
+    aspect-ratio: 9/16;
+    transition: box-shadow 0.3s ease;
+    user-select: none;
+    -webkit-user-drag: none;
+    scroll-snap-align: center;
+    
+    /* Dynamic Width Calculation:
+       (100% of container - (Total Gaps)) / Number of Cards 
+       Note: We subtract padding from the 100% width context if needed, but flex basis handles it relative to parent.
+       Here 100% refers to the track width. 
+    */
+    width: calc( (100% - (var(--vc-count-mobile) - 1) * var(--vc-gap)) / var(--vc-count-mobile) );
+  }
+
+  .video-card video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    pointer-events: none; /* Allows click to pass to card */
+  }
+
+  /* Play Overlay */
+  .play-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.1);
+    transition: opacity 0.3s ease;
+    z-index: 2;
+  }
+  .video-card.video-playing .play-overlay {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .play-btn-circle {
+    width: 48px;
+    height: 48px;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .play-icon-triangle {
+    width: 0; 
+    height: 0; 
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 14px solid white;
+    margin-left: 4px;
+  }
+
+  /* Navigation Buttons */
+  .vc-nav-btn {
+    position: absolute;
+    top: 55%; /* Slightly offset to account for header */
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    z-index: 10;
+    transition: all 0.2s ease;
+    opacity: 0; /* Hidden by default until hover on desktop */
+  }
+  .vc-wrapper:hover .vc-nav-btn {
+    opacity: 1;
+  }
+  .vc-nav-btn:hover {
+    transform: translateY(-50%) scale(1.1);
+    background: #f9f9f9;
+  }
+  .vc-nav-btn svg { width: 20px; height: 20px; stroke: #333; }
+  .vc-prev { left: 20px; }
+  .vc-next { right: 20px; }
+
+  /* Dragging State */
+  .vc-track.active {
+    cursor: grabbing;
+    scroll-snap-type: none;
+    scroll-behavior: auto;
+  }
+
+  /* Desktop Media Query */
+  @media (min-width: 768px) {
+    .video-card {
+      /* Desktop Width Calculation */
+      width: calc( (100% - (var(--vc-count-desktop) - 1) * var(--vc-gap)) / var(--vc-count-desktop) );
+    }
+    .vc-track {
+      padding: 20px 40px; /* Larger side padding on desktop */
+    }
+  }
+
+  /* Hide Nav on Mobile */
+  @media (max-width: 767px) {
+    .vc-nav-btn { display: none !important;
+   }
+    .video-card {
+    aspect-ratio: 3/4;
+  }
+  }
+{% endstyle %}
+
+<div class="vc-wrapper" id="root-{{ section.id }}">
+  <div class="vc-container">
+    
+    {% if section.settings.show_header %}
+    <div class="vc-header">
+      <h2>{{ section.settings.heading }}</h2>
+      <p>{{ section.settings.subheading }}</p>
+    </div>
+    {% endif %}
+
+    {% if section.settings.show_nav %}
+      <button class="vc-nav-btn vc-prev" aria-label="Previous">
+        <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+        </svg>
+      </button>
+      <button class="vc-nav-btn vc-next" aria-label="Next">
+        <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+        </svg>
+      </button>
+    {% endif %}
+
+    <div class="vc-track" id="track-{{ section.id }}">
+      {% for block in section.blocks %}
+        <div class="video-card" {{ block.shopify_attributes }}>
+          <div class="play-overlay">
+            <div class="play-btn-circle">
+              <div class="play-icon-triangle"></div>
+            </div>
+          </div>
+          
+          {% comment %} Video Logic: Prefer Shopify Video, Fallback to External {% endcomment %}
+          {% if block.settings.shopify_video != blank %}
+            {{ block.settings.shopify_video | video_tag: autoplay: false, loop: true, muted: true, playsinline: true, controls: false, image_size: '600x' }}
+          {% elsif block.settings.external_video != blank %}
+            <video 
+              width="100%" 
+              height="100%" 
+              loop muted playsinline
+              {% if block.settings.poster_image != blank %}poster="{{ block.settings.poster_image | image_url: width: 600 }}"{% endif %}
+            >
+              <source src="{{ block.settings.external_video }}" type="video/mp4">
+            </video>
+          {% else %}
+            <!-- Placeholder for empty blocks -->
+            {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</div>
+
+{% javascript %}
+class VideoCarousel {
+  constructor(container) {
+    this.container = container;
+    this.track = container.querySelector('.vc-track');
+    this.cards = container.querySelectorAll('.video-card');
+    this.prevBtn = container.querySelector('.vc-prev');
+    this.nextBtn = container.querySelector('.vc-next');
+    
+    this.isHovering = false;
+    this.currentPlayingCard = null;
+    this.isDown = false;
+    this.startX = 0;
+    this.scrollLeft = 0;
+
+    this.init();
+  }
+
+  init() {
+    // 1. Hover & Click Interactions
+    this.cards.forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        if (this.isDown) return;
+        this.isHovering = true;
+        this.playCard(card);
+      });
+      
+      card.addEventListener('mouseleave', () => {
+        this.isHovering = false;
+      });
+
+      // Mobile Tap Support
+      card.addEventListener('click', () => {
+        if(!this.isDown) this.playCard(card);
+      });
+    });
+
+    // 2. Intersection Observer (Auto Play Center)
+    this.observer = new IntersectionObserver((entries) => {
+      if (this.isHovering || this.isDown) return;
+
+      const visibleEntries = entries.filter(entry => entry.isIntersecting);
+      if (visibleEntries.length > 0) {
+        this.findAndPlayCenter(visibleEntries);
+      }
+    }, { root: this.track, threshold: 0.6 });
+
+    this.cards.forEach(card => this.observer.observe(card));
+
+    // 3. Navigation Buttons
+    if (this.prevBtn && this.nextBtn) {
+      this.prevBtn.addEventListener('click', () => this.scroll(-1));
+      this.nextBtn.addEventListener('click', () => this.scroll(1));
+    }
+
+    // 4. Drag to Scroll
+    this.track.addEventListener('mousedown', (e) => this.startDrag(e));
+    this.track.addEventListener('mouseleave', () => this.stopDrag());
+    this.track.addEventListener('mouseup', () => this.stopDrag());
+    this.track.addEventListener('mousemove', (e) => this.drag(e));
+    
+    // Initial check
+    setTimeout(() => this.triggerScrollEvent(), 500);
+  }
+
+  playCard(cardToPlay) {
+    if (this.currentPlayingCard === cardToPlay && !cardToPlay.querySelector('video').paused) return;
+
+    // Pause others
+    this.cards.forEach(card => {
+      const vid = card.querySelector('video');
+      if (vid && card !== cardToPlay) {
+        vid.pause();
+        vid.currentTime = 0;
+        card.classList.remove('video-playing');
+      }
+    });
+
+    // Play target
+    const video = cardToPlay.querySelector('video');
+    if (video) {
+      video.muted = true; // Crucial for autoplay policies
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          cardToPlay.classList.add('video-playing');
+          this.currentPlayingCard = cardToPlay;
+        }).catch(err => console.log('Autoplay prevented'));
+      }
+    }
+  }
+
+  findAndPlayCenter(visibleEntries) {
+    let closestEntry = null;
+    let minDistance = Infinity;
+    const trackCenter = this.track.getBoundingClientRect().width / 2;
+
+    visibleEntries.forEach(entry => {
+      const rect = entry.target.getBoundingClientRect();
+      const trackRect = this.track.getBoundingClientRect();
+      const relativeCardCenter = (rect.left - trackRect.left) + (rect.width / 2);
+      const distance = Math.abs(relativeCardCenter - trackCenter);
+
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestEntry = entry;
+      }
+    });
+
+    if (closestEntry) {
+      this.playCard(closestEntry.target);
+    }
+  }
+
+  scroll(direction) {
+    const cardWidth = this.cards[0].offsetWidth;
+    // Get gap from computed style or fallback
+    const style = window.getComputedStyle(this.track);
+    const gap = parseFloat(style.gap || 16);
+    
+    this.track.scrollBy({ left: direction * (cardWidth + gap), behavior: 'smooth' });
+  }
+
+  startDrag(e) {
+    this.isDown = true;
+    this.track.classList.add('active');
+    this.startX = e.pageX - this.track.offsetLeft;
+    this.scrollLeft = this.track.scrollLeft;
+    e.preventDefault();
+  }
+
+  stopDrag() {
+    this.isDown = false;
+    this.track.classList.remove('active');
+  }
+
+  drag(e) {
+    if (!this.isDown) return;
+    e.preventDefault();
+    const x = e.pageX - this.track.offsetLeft;
+    const walk = (x - this.startX) * 2;
+    this.track.scrollLeft = this.scrollLeft - walk;
+  }
+  
+  triggerScrollEvent() {
+     // Manually trigger observer check
+     // Creating a tiny scroll wiggle can sometimes force update
+     this.track.dispatchEvent(new Event('scroll'));
+  }
+}
+
+// Initialize on Load and Design Mode interactions
+document.addEventListener('DOMContentLoaded', () => {
+  const sections = document.querySelectorAll('.vc-wrapper');
+  sections.forEach(el => new VideoCarousel(el));
+});
+
+// Support for Shopify Design Mode re-rendering
+document.addEventListener('shopify:section:load', (e) => {
+  const container = e.target.querySelector('.vc-wrapper');
+  if (container) new VideoCarousel(container);
+});
+{% endjavascript %}
