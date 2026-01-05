@@ -1,0 +1,830 @@
+{% comment %}
+  Review Carousel Section
+  Features: Auto-slide, drag functionality, fully responsive
+{% endcomment %}
+
+{% assign section_id = section.id %}
+
+<section class="review-carousel-section" data-section-id="{{ section_id }}">
+  <div class="review-carousel-wrapper">
+    <div class="review-summary-box">
+      <h2 class="review-title">{{ section.settings.rating_title }}</h2>
+      <div class="stars-display">
+        {% assign rating_floor = section.settings.average_rating | floor %}
+        {% assign rating_ceil = section.settings.average_rating | ceil %}
+        {% assign has_half = false %}
+        {% if section.settings.average_rating != rating_floor %}
+          {% assign has_half = true %}
+        {% endif %}
+        
+        {% for i in (1..5) %}
+          {% if i <= rating_floor %}
+            <span class="star filled">★</span>
+          {% elsif i == rating_ceil and has_half %}
+            <span class="star half">★</span>
+          {% else %}
+            <span class="star empty">☆</span>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <p class="rating-average">{{ section.settings.average_rating }} average</p>
+      <p class="rating-count">{{ section.settings.review_count }} reviews</p>
+    </div>
+
+    <div class="carousel-container">
+      <button class="nav-arrow prev-arrow" aria-label="Previous"><img src="https://cdn.shopify.com/s/files/1/0959/0036/9225/files/icons8-left-arrow-100.png?v=1767418597"></button>
+      
+      <div class="carousel-viewport">
+        <div class="carousel-track" data-auto-slide="{{ section.settings.auto_slide }}" data-slide-duration="{{ section.settings.slide_duration }}">
+          {% for block in section.blocks %}
+            <div class="review-card" {{ block.shopify_attributes }}>
+              <div class="card-header">
+                <h3 class="reviewer-name">{{ block.settings.reviewer_name }}</h3>
+                <div class="card-stars">
+                  {% for i in (1..5) %}
+                    {% if i <= block.settings.rating %}
+                      <span class="star">★</span>
+                    {% else %}
+                      <span class="star empty">☆</span>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+              
+              {% if block.settings.verified_customer %}
+                <div class="verified-badge">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <circle cx="8" cy="8" r="7" fill="currentColor"/>
+                    <path d="M6 8L7.5 9.5L10 6.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <span>Verified Customer</span>
+                </div>
+              {% endif %}
+
+              <p class="review-content">{{ block.settings.review_text }}</p>
+
+              <div class="card-footer">
+                {% if block.settings.location %}
+                  <span class="location">{{ block.settings.location }}, </span>
+                {% endif %}
+                <span class="review-date">{{ block.settings.date }}</span>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      
+      <button class="nav-arrow next-arrow" aria-label="Next"><img src="https://cdn.shopify.com/s/files/1/0959/0036/9225/files/icons8-right-arrow-100.png?v=1767418471"></button>
+    </div>
+
+    <div class="pause-control">
+      <button class="pause-btn" aria-label="Pause">
+        <span class="pause-icon">||</span>
+        <span class="play-icon" style="display: none;">▶</span>
+        <span class="pause-label">Pause</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<style>
+.review-carousel-section {
+  background-color: {{ section.settings.background_color }};
+  padding: 60px 20px 100px;
+  position: relative;
+}
+
+.review-carousel-wrapper {
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+/* Summary Box - Left Side */
+.review-summary-box {
+  background-color: {{ section.settings.summary_bg_color }};
+  color: {{ section.settings.summary_text_color }};
+  padding: 50px 40px;
+  text-align: center;
+  display: inline-block;
+  vertical-align: top;
+  width: 230px;
+  margin-right: 30px;
+  border-radius: 0;
+}
+
+.review-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 20px 0;
+  letter-spacing: -0.5px;
+  color: #fff;
+}
+
+.stars-display {
+  font-size: 28px;
+  margin-bottom: 15px;
+  letter-spacing: 3px;
+  line-height: 1;
+}
+
+.stars-display .star.filled {
+  color: {{ section.settings.star_color }};
+}
+
+.stars-display .star.half {
+  position: relative;
+  display: inline-block;
+  color: #ccc;
+}
+
+.stars-display .star.half::before {
+  content: '★';
+  position: absolute;
+  left: 0;
+  width: 50%;
+  overflow: hidden;
+  color: {{ section.settings.star_color }};
+}
+
+.stars-display .star.empty {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.rating-average {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 15px 0 5px 0;
+}
+
+.rating-count {
+  font-size: 14px;
+  margin: 0;
+  opacity: 0.85;
+}
+
+/* Carousel Container */
+.carousel-container {
+  display: inline-block;
+  width: calc(100% - 280px);
+  position: relative;
+  vertical-align: top;
+}
+
+.carousel-viewport {
+  overflow: hidden;
+  cursor: grab;
+  padding: 0 10px;
+}
+
+.carousel-viewport:active {
+  cursor: grabbing;
+}
+
+.carousel-track {
+  display: flex;
+  gap: 25px;
+  transition: transform 0.5s ease-in-out;
+}
+
+/* Review Cards */
+.review-card {
+  min-width: 380px;
+  max-width: 380px;
+  flex-shrink: 0;
+  background: #ffffff;
+  padding: 32px 28px;
+  border-radius: 0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e8e8e8;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.reviewer-name {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0;
+  color: #000;
+  line-height: 1.3;
+}
+
+.card-stars {
+  font-size: 15px;
+  letter-spacing: 1px;
+  line-height: 1;
+}
+
+.card-stars .star {
+  color: #000;
+}
+
+.card-stars .star.empty {
+  color: #d0d0d0;
+}
+
+.verified-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #000;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+.verified-badge svg {
+  width: 14px;
+  height: 14px;
+  color: #000;
+}
+
+.review-content {
+  font-size: 14px;
+  line-height: 1.65;
+  color: #333;
+  margin: 0 0 20px 0;
+  font-weight: 400;
+}
+
+.card-footer {
+  font-size: 12px;
+  color: #999;
+  text-align: right;
+  font-weight: 400;
+}
+
+.location {
+  color: #999;
+}
+
+.review-date {
+  color: #999;
+}
+
+/* Navigation Arrows */
+.nav-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  color: #000;
+  border: none;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  font-size: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  opacity: 0.4;
+  transition: opacity 0.3s;
+  font-weight: 300;
+  line-height: 1;
+  padding: 0;
+}
+
+.nav-arrow:hover {
+  opacity: 0.8;
+}
+
+.prev-arrow {
+  left: -25px;
+}
+
+.next-arrow {
+  right: -25px;
+}
+
+/* Pause Control */
+.pause-control {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+}
+
+.pause-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #666;
+  padding: 0;
+  font-weight: 500;
+}
+
+.pause-btn:hover {
+  color: #000;
+}
+
+.pause-icon,
+.play-icon {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* Desktop/Large Screen - Matching First Image */
+@media (min-width: 1200px) {
+  .review-carousel-section {
+    padding: 80px 40px 100px;
+  }
+  
+  .review-summary-box {
+    width: 230px;
+    margin-right: 30px;
+  }
+  
+  .carousel-container {
+    width: calc(100% - 280px);
+  }
+  
+  .review-card {
+    min-width: 380px;
+    max-width: 380px;
+  }
+}
+
+/* Tablet */
+@media (max-width: 1199px) {
+  .review-summary-box {
+    width: 200px;
+    margin-right: 20px;
+    padding: 40px 30px;
+  }
+  
+  .carousel-container {
+    width: calc(100% - 240px);
+  }
+  
+  .review-card {
+    min-width: 340px;
+    max-width: 340px;
+  }
+}
+
+/* Mobile - Matching Second Image */
+@media (max-width: 768px) {
+  .review-carousel-section {
+    padding: 50px 20px 80px;
+  }
+  
+  .review-summary-box {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 30px;
+    display: block;
+    padding: 40px 30px;
+  }
+  
+  .review-title {
+    font-size: 26px;
+  }
+  
+  .stars-display {
+    font-size: 26px;
+  }
+  
+  .carousel-container {
+    width: 100%;
+    display: block;
+  }
+  
+  .carousel-viewport {
+    padding: 0;
+  }
+  
+  .review-card {
+    min-width: calc(100vw - 100px);
+    max-width: 100%;
+    padding: 28px 24px;
+  }
+  
+  .nav-arrow {
+    width: 40px;
+    height: 40px;
+    font-size: 36px;
+  }
+  
+  .prev-arrow {
+    left: 10px;
+  }
+  
+  .next-arrow {
+    right: 10px;
+  }
+  
+  .pause-control {
+    bottom: 20px;
+    right: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .review-card {
+    min-width: calc(100vw - 80px);
+    max-width: 100%;
+  }
+  
+  .nav-arrow {
+    width: 35px;
+    height: 35px;
+    font-size: 32px;
+  }
+}
+</style>
+
+<script>
+(function() {
+  const section = document.querySelector('[data-section-id="{{ section_id }}"]');
+  if (!section) return;
+  
+  const track = section.querySelector('.carousel-track');
+  const originalCards = section.querySelectorAll('.review-card');
+  const prevBtn = section.querySelector('.prev-arrow');
+  const nextBtn = section.querySelector('.next-arrow');
+  const pauseBtn = section.querySelector('.pause-btn');
+  const pauseIcon = section.querySelector('.pause-icon');
+  const playIcon = section.querySelector('.play-icon');
+  const pauseLabel = section.querySelector('.pause-label');
+  
+  if (!track || !originalCards.length) return;
+  
+  // Clone cards for infinite loop
+  const cloneCount = 3; // Number of times to clone the set
+  for (let i = 0; i < cloneCount; i++) {
+    originalCards.forEach(card => {
+      const clone = card.cloneNode(true);
+      track.appendChild(clone);
+    });
+  }
+  
+  // Clone at the beginning too
+  for (let i = 0; i < cloneCount; i++) {
+    const clones = [];
+    originalCards.forEach(card => {
+      const clone = card.cloneNode(true);
+      clones.push(clone);
+    });
+    clones.reverse().forEach(clone => {
+      track.insertBefore(clone, track.firstChild);
+    });
+  }
+  
+  const allCards = track.querySelectorAll('.review-card');
+  const totalOriginal = originalCards.length;
+  let currentIndex = totalOriginal * cloneCount; // Start at first original set
+  
+  let isAutoSliding = track.dataset.autoSlide === 'true';
+  let autoSlideInterval;
+  let isDragging = false;
+  let startPos = 0;
+  let currentTranslate = 0;
+  let prevTranslate = 0;
+  let animationID;
+  let isTransitioning = false;
+
+  function getCardWidth() {
+    return allCards[0].offsetWidth + 25;
+  }
+
+  function updateCarousel(animate = true) {
+    const cardWidth = getCardWidth();
+    const offset = -currentIndex * cardWidth;
+    
+    if (animate) {
+      track.style.transition = 'transform 0.5s ease-in-out';
+    } else {
+      track.style.transition = 'none';
+    }
+    
+    track.style.transform = `translateX(${offset}px)`;
+  }
+
+  function checkInfiniteLoop() {
+    const totalCards = allCards.length;
+    
+    // If we've scrolled past the last set, jump to the first original set
+    if (currentIndex >= totalCards - totalOriginal) {
+      isTransitioning = true;
+      setTimeout(() => {
+        currentIndex = totalOriginal * cloneCount;
+        updateCarousel(false);
+        isTransitioning = false;
+      }, 500);
+    }
+    
+    // If we've scrolled before the first set, jump to the last original set
+    if (currentIndex < totalOriginal) {
+      isTransitioning = true;
+      setTimeout(() => {
+        currentIndex = totalOriginal * cloneCount + (currentIndex % totalOriginal);
+        updateCarousel(false);
+        isTransitioning = false;
+      }, 500);
+    }
+  }
+
+  function nextSlide() {
+    if (isTransitioning) return;
+    currentIndex++;
+    updateCarousel();
+    checkInfiniteLoop();
+  }
+
+  function prevSlide() {
+    if (isTransitioning) return;
+    currentIndex--;
+    updateCarousel();
+    checkInfiniteLoop();
+  }
+
+  function startAutoSlide() {
+    if (isAutoSliding) {
+      const duration = parseInt(track.dataset.slideDuration) * 1000 || 5000;
+      autoSlideInterval = setInterval(nextSlide, duration);
+    }
+  }
+
+  function stopAutoSlide() {
+    clearInterval(autoSlideInterval);
+  }
+
+  function toggleAutoSlide() {
+    isAutoSliding = !isAutoSliding;
+    if (isAutoSliding) {
+      pauseIcon.style.display = 'inline';
+      playIcon.style.display = 'none';
+      pauseLabel.textContent = 'Pause';
+      startAutoSlide();
+    } else {
+      pauseIcon.style.display = 'none';
+      playIcon.style.display = 'inline';
+      pauseLabel.textContent = 'Play';
+      stopAutoSlide();
+    }
+  }
+
+  // Navigation
+  nextBtn.addEventListener('click', () => {
+    stopAutoSlide();
+    nextSlide();
+    if (isAutoSliding) startAutoSlide();
+  });
+
+  prevBtn.addEventListener('click', () => {
+    stopAutoSlide();
+    prevSlide();
+    if (isAutoSliding) startAutoSlide();
+  });
+
+  pauseBtn.addEventListener('click', toggleAutoSlide);
+
+  // Drag functionality
+  function getPositionX(e) {
+    return e.type.includes('mouse') ? e.pageX : e.touches[0].clientX;
+  }
+
+  function touchStart(e) {
+    if (isTransitioning) return;
+    isDragging = true;
+    startPos = getPositionX(e);
+    animationID = requestAnimationFrame(animation);
+    stopAutoSlide();
+  }
+
+  function touchMove(e) {
+    if (!isDragging) return;
+    const currentPosition = getPositionX(e);
+    currentTranslate = prevTranslate + currentPosition - startPos;
+  }
+
+  function touchEnd() {
+    if (!isDragging) return;
+    isDragging = false;
+    cancelAnimationFrame(animationID);
+
+    const movedBy = currentTranslate - prevTranslate;
+    const cardWidth = getCardWidth();
+
+    if (movedBy < -100) {
+      currentIndex++;
+    } else if (movedBy > 100) {
+      currentIndex--;
+    }
+
+    prevTranslate = -currentIndex * cardWidth;
+    currentTranslate = prevTranslate;
+    updateCarousel();
+    checkInfiniteLoop();
+
+    if (isAutoSliding) startAutoSlide();
+  }
+
+  function animation() {
+    track.style.transform = `translateX(${currentTranslate}px)`;
+    if (isDragging) requestAnimationFrame(animation);
+  }
+
+  const viewport = section.querySelector('.carousel-viewport');
+  viewport.addEventListener('mousedown', touchStart);
+  viewport.addEventListener('touchstart', touchStart, { passive: true });
+  viewport.addEventListener('mousemove', touchMove);
+  viewport.addEventListener('touchmove', touchMove, { passive: true });
+  viewport.addEventListener('mouseup', touchEnd);
+  viewport.addEventListener('touchend', touchEnd);
+  viewport.addEventListener('mouseleave', () => {
+    if (isDragging) touchEnd();
+  });
+
+  viewport.addEventListener('contextmenu', e => e.preventDefault());
+
+  // Initialize position
+  updateCarousel(false);
+  prevTranslate = -currentIndex * getCardWidth();
+  currentTranslate = prevTranslate;
+  
+  // Start auto-slide
+  startAutoSlide();
+
+  // Handle resize
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      updateCarousel(false);
+      prevTranslate = -currentIndex * getCardWidth();
+      currentTranslate = prevTranslate;
+    }, 250);
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Review Carousel",
+  "settings": [
+    {
+      "type": "text",
+      "id": "rating_title",
+      "label": "Rating Title",
+      "default": "Excellent"
+    },
+    {
+      "type": "text",
+      "id": "average_rating",
+      "label": "Average Rating",
+      "default": "4.34",
+      "info": "Enter decimal value between 0 and 5 (e.g., 4.34)"
+    },
+    {
+      "type": "text",
+      "id": "review_count",
+      "label": "Review Count",
+      "default": "1,547"
+    },
+    {
+      "type": "checkbox",
+      "id": "auto_slide",
+      "label": "Enable Auto Slide",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "slide_duration",
+      "label": "Slide Duration (seconds)",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#ebe9e1"
+    },
+    {
+      "type": "color",
+      "id": "summary_bg_color",
+      "label": "Summary Background Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "summary_text_color",
+      "label": "Summary Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "star_color",
+      "label": "Star Color",
+      "default": "#ffffff"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        {
+          "type": "text",
+          "id": "reviewer_name",
+          "label": "Reviewer Name",
+          "default": "Anonymous"
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "label": "Rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "checkbox",
+          "id": "verified_customer",
+          "label": "Verified Customer",
+          "default": true
+        },
+        {
+          "type": "textarea",
+          "id": "review_text",
+          "label": "Review Text",
+          "default": "This is an amazing product! Highly recommended."
+        },
+        {
+          "type": "text",
+          "id": "location",
+          "label": "Location",
+          "info": "Optional - e.g., Carlisle, GB"
+        },
+        {
+          "type": "text",
+          "id": "date",
+          "label": "Date",
+          "default": "3 months ago"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Review Carousel",
+      "blocks": [
+        {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "Anonymous",
+            "rating": 5,
+            "verified_customer": true,
+            "review_text": "I have only purchased a single item from aab but I was impressed by the way you could select different lengths for a clothing item",
+            "location": "Carlisle, GB",
+            "date": "2 months ago"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "Emma Pardue",
+            "rating": 5,
+            "verified_customer": true,
+            "review_text": "absolutely loveee my new hijab and abaya. the abaya is the perfect material for the heat and easy to wear with thermals for winter. the hijab is my new go to everyday hijab",
+            "date": "3 months ago"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "Fatima Mirza",
+            "rating": 4,
+            "verified_customer": true,
+            "review_text": "I have been a longstanding customer of Aab collection for many years. The collections are stylish and have good fabrics. The sizing is a little different so checking the information to see whether it's a slim fit or relaxed fit helps. Descriptions have improved and the sizes and...",
+            "location": "Belguard, United Kingdom",
+            "date": "3 months ago"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "Bayan Hilal",
+            "rating": 5,
+            "verified_customer": true,
+            "review_text": "Very high quality garments. well made pockets, mindful construction very happy",
+            "date": "3 months ago"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
