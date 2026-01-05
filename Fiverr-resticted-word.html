@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FiverrSafe - Restricted Word Checker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #2a9d8f;
+      --primary-hover: #238b7e;
+      --background: #f8fafa;
+      --card: #ffffff;
+      --foreground: #1a2e2a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --warning: #f97316;
+      --warning-bg: #fff7ed;
+      --success: #10b981;
+      --success-bg: #ecfdf5;
+      --destructive: #ef4444;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--background);
+      color: var(--foreground);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    /* Header */
+    .header {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.5rem;
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(42, 157, 143, 0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+    }
+
+    .logo-text h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--foreground);
+    }
+
+    .logo-text p {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    /* Main */
+    .main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero h2 {
+      font-size: 2rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .hero h2 span {
+      background: linear-gradient(135deg, #2a9d8f, #14b8a6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      color: var(--muted);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Editor */
+    .editor-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+    }
+
+    .editor-label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .editor-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .btn {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      border: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+    }
+
+    .btn-ghost:hover {
+      background: var(--background);
+      color: var(--foreground);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--foreground);
+    }
+
+    .btn-outline:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+
+    .btn-sm {
+      padding: 0.375rem 0.75rem;
+      font-size: 0.8125rem;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 280px;
+      padding: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      line-height: 1.7;
+      resize: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.1);
+    }
+
+    .editor-footer {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.75rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    /* Results */
+    .results-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+    }
+
+    .status.warning {
+      color: var(--warning);
+    }
+
+    .status.success {
+      color: var(--success);
+    }
+
+    .results-list {
+      max-height: 400px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .result-card {
+      padding: 1rem;
+      background: var(--background);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      transition: all 0.2s;
+    }
+
+    .result-card:hover {
+      border-color: rgba(42, 157, 143, 0.3);
+      box-shadow: 0 2px 12px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    .result-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .result-word {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    .result-word .icon {
+      color: var(--warning);
+    }
+
+    .badge {
+      font-size: 0.6875rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 6px;
+      font-weight: 500;
+    }
+
+    .badge-count {
+      background: var(--background);
+      color: var(--muted);
+    }
+
+    .badge-contact {
+      background: rgba(239, 68, 68, 0.1);
+      color: #dc2626;
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+    .badge-payment {
+      background: rgba(249, 115, 22, 0.1);
+      color: #ea580c;
+      border: 1px solid rgba(249, 115, 22, 0.2);
+    }
+
+    .badge-platform {
+      background: rgba(168, 85, 247, 0.1);
+      color: #9333ea;
+      border: 1px solid rgba(168, 85, 247, 0.2);
+    }
+
+    .badge-spam {
+      background: rgba(245, 158, 11, 0.1);
+      color: #d97706;
+      border: 1px solid rgba(245, 158, 11, 0.2);
+    }
+
+    .badge-other {
+      background: var(--background);
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    .replacement {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
+    }
+
+    .replacement .old {
+      color: var(--muted);
+      text-decoration: line-through;
+    }
+
+    .replacement .arrow {
+      color: var(--muted);
+    }
+
+    .replacement .new {
+      color: var(--success);
+      font-weight: 500;
+    }
+
+    /* Empty states */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+    }
+
+    .empty-state .icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .empty-state p {
+      color: var(--muted);
+      font-size: 0.875rem;
+    }
+
+    .success-state {
+      text-align: center;
+      padding: 2rem;
+      background: var(--success-bg);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      border-radius: 12px;
+    }
+
+    .success-state .icon {
+      font-size: 3rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .success-state h3 {
+      color: var(--foreground);
+      margin-bottom: 0.25rem;
+    }
+
+    .success-state p {
+      color: var(--muted);
+      font-size: 0.875rem;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 1.5rem;
+      border-top: 1px solid var(--border);
+      margin-top: 2rem;
+    }
+
+    .footer p {
+      font-size: 0.875rem;
+      color: var(--muted);
+    }
+
+    .footer .heart {
+      color: var(--destructive);
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      background: var(--foreground);
+      color: white;
+      padding: 0.875rem 1.25rem;
+      border-radius: 10px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.3);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast.success {
+      background: var(--success);
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <div class="logo">
+        <div class="logo-icon">🛡️</div>
+        <div class="logo-text">
+          <h1>FiverrSafe</h1>
+          <p>Restricted Word Checker</p>
+        </div>
+      </div>
+      <div style="color: var(--muted); font-size: 0.875rem;">✨ Keep your gig safe</div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="hero">
+      <h2>Check Your <span>Fiverr Gig</span> Text</h2>
+      <p>Paste your gig description below. We'll find restricted words and suggest safe replacements.</p>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="editor-header">
+          <label class="editor-label">📄 Your Gig Text</label>
+          <div class="editor-actions">
+            <button class="btn btn-ghost btn-sm" onclick="pasteText()">Paste</button>
+            <button class="btn btn-ghost btn-sm" onclick="copyText()">📋</button>
+            <button class="btn btn-ghost btn-sm" onclick="clearText()">🗑️</button>
+          </div>
+        </div>
+        <textarea id="textInput" placeholder="Paste your Fiverr gig description, title, or any text here to check for restricted words..."></textarea>
+        <div class="editor-footer">
+          <span id="wordCount">0 words</span>
+          <span id="charCount">0 characters</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="results-header">
+          <div class="status" id="statusText">
+            <span>Enter text to check</span>
+          </div>
+          <button class="btn btn-primary btn-sm" id="replaceAllBtn" onclick="replaceAll()" style="display: none;">
+            ✨ Replace All
+          </button>
+        </div>
+        <div id="resultsContainer">
+          <div class="empty-state">
+            <div class="icon">🔍</div>
+            <p>Paste your gig text on the left to start checking</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>Made with <span class="heart">❤️</span> for Fiverr sellers</p>
+    <p style="font-size: 0.75rem; margin-top: 0.5rem; opacity: 0.7;">This tool helps identify potentially restricted words. Always review Fiverr's official guidelines.</p>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // Restricted words database
+    const restrictedWords = [
+      // Contact info
+      { word: 'phone', replacement: 'ph.one', category: 'contact' },
+      { word: 'contact', replacement: 'cont.act', category: 'contact' },
+      { word: 'email', replacement: 'em.ail', category: 'contact' },
+      { word: 'whatsapp', replacement: 'whats.app', category: 'contact' },
+      { word: 'skype', replacement: 'sk.ype', category: 'contact' },
+      { word: 'telegram', replacement: 'tele.gram', category: 'contact' },
+      { word: 'discord', replacement: 'dis.cord', category: 'contact' },
+      { word: 'facebook', replacement: 'face.book', category: 'contact' },
+      { word: 'instagram', replacement: 'insta.gram', category: 'contact' },
+      { word: 'linkedin', replacement: 'linked.in', category: 'contact' },
+      { word: 'twitter', replacement: 'twit.ter', category: 'contact' },
+      { word: 'snapchat', replacement: 'snap.chat', category: 'contact' },
+      { word: 'wechat', replacement: 'we.chat', category: 'contact' },
+      { word: 'viber', replacement: 'vi.ber', category: 'contact' },
+      { word: 'zoom', replacement: 'zo.om', category: 'contact' },
+      { word: 'messenger', replacement: 'messen.ger', category: 'contact' },
+      { word: 'gmail', replacement: 'gm.ail', category: 'contact' },
+      { word: 'call', replacement: 'ca.ll', category: 'contact' },
+      { word: 'number', replacement: 'num.ber', category: 'contact' },
+
+      // Payment related
+      { word: 'payment', replacement: 'pa_yment', category: 'payment' },
+      { word: 'pay', replacement: 'p.ay', category: 'payment' },
+      { word: 'paypal', replacement: 'pay.pal', category: 'payment' },
+      { word: 'venmo', replacement: 'ven.mo', category: 'payment' },
+      { word: 'cashapp', replacement: 'cash.app', category: 'payment' },
+      { word: 'zelle', replacement: 'zel.le', category: 'payment' },
+      { word: 'wise', replacement: 'wi.se', category: 'payment' },
+      { word: 'crypto', replacement: 'cry.pto', category: 'payment' },
+      { word: 'bitcoin', replacement: 'bit.coin', category: 'payment' },
+      { word: 'invoice', replacement: 'in.voice', category: 'payment' },
+      { word: 'bank', replacement: 'ba.nk', category: 'payment' },
+      { word: 'transfer', replacement: 'trans.fer', category: 'payment' },
+      { word: 'money', replacement: 'mo.ney', category: 'payment' },
+      { word: 'cash', replacement: 'ca.sh', category: 'payment' },
+
+      // Platform mentions
+      { word: 'upwork', replacement: 'up.work', category: 'platform' },
+      { word: 'freelancer', replacement: 'free.lancer', category: 'platform' },
+      { word: 'toptal', replacement: 'top.tal', category: 'platform' },
+      { word: 'guru', replacement: 'gu.ru', category: 'platform' },
+
+      // Review related
+      { word: 'review', replacement: 're.view', category: 'spam' },
+      { word: 'reviews', replacement: 're.views', category: 'spam' },
+      { word: 'rating', replacement: 'ra.ting', category: 'spam' },
+      { word: 'feedback', replacement: 'feed.back', category: 'spam' },
+      { word: 'guaranteed', replacement: 'guaran.teed', category: 'spam' },
+      { word: 'guarantee', replacement: 'guaran.tee', category: 'spam' },
+      { word: 'unlimited', replacement: 'unlimi.ted', category: 'spam' },
+
+      // Other restricted terms
+      { word: 'free', replacement: 'fr.ee', category: 'other' },
+      { word: 'refund', replacement: 're.fund', category: 'other' },
+      { word: 'cheap', replacement: 'che.ap', category: 'other' },
+      { word: 'discount', replacement: 'dis.count', category: 'other' },
+      { word: 'order', replacement: 'or.der', category: 'other' },
+      { word: 'website', replacement: 'web.site', category: 'other' },
+      { word: 'sample', replacement: 'sam.ple', category: 'other' },
+    ];
+
+    const categoryLabels = {
+      contact: 'Contact Info',
+      payment: 'Payment',
+      platform: 'Platform',
+      spam: 'Spam/Claims',
+      other: 'Other'
+    };
+
+    const textInput = document.getElementById('textInput');
+    const resultsContainer = document.getElementById('resultsContainer');
+    const statusText = document.getElementById('statusText');
+    const replaceAllBtn = document.getElementById('replaceAllBtn');
+    const wordCount = document.getElementById('wordCount');
+    const charCount = document.getElementById('charCount');
+
+    // Event listener for text input
+    textInput.addEventListener('input', checkText);
+
+    function checkText() {
+      const text = textInput.value;
+      
+      // Update counts
+      const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+      wordCount.textContent = `${words} words`;
+      charCount.textContent = `${text.length} characters`;
+
+      if (!text.trim()) {
+        resultsContainer.innerHTML = `
+          <div class="empty-state">
+            <div class="icon">🔍</div>
+            <p>Paste your gig text on the left to start checking</p>
+          </div>
+        `;
+        statusText.innerHTML = '<span>Enter text to check</span>';
+        statusText.className = 'status';
+        replaceAllBtn.style.display = 'none';
+        return;
+      }
+
+      // Find restricted words
+      const lowerText = text.toLowerCase();
+      const detected = [];
+
+      for (const item of restrictedWords) {
+        const regex = new RegExp(item.word, 'gi');
+        const matches = lowerText.match(regex);
+        if (matches && matches.length > 0) {
+          detected.push({
+            ...item,
+            count: matches.length
+          });
+        }
+      }
+
+      // Sort by count
+      detected.sort((a, b) => b.count - a.count);
+      const totalIssues = detected.reduce((sum, w) => sum + w.count, 0);
+
+      if (detected.length === 0) {
+        resultsContainer.innerHTML = `
+          <div class="success-state">
+            <div class="icon">✅</div>
+            <h3>Your text is safe!</h3>
+            <p>No restricted words detected. You're good to go!</p>
+          </div>
+        `;
+        statusText.innerHTML = '✅ <span>All Clear!</span>';
+        statusText.className = 'status success';
+        replaceAllBtn.style.display = 'none';
+      } else {
+        resultsContainer.innerHTML = `
+          <div class="results-list">
+            ${detected.map(item => `
+              <div class="result-card">
+                <div class="result-header">
+                  <div>
+                    <div class="result-word">
+                      <span class="icon">⚠️</span>
+                      <span>"${item.word}"</span>
+                      ${item.count > 1 ? `<span class="badge badge-count">×${item.count}</span>` : ''}
+                    </div>
+                    <span class="badge badge-${item.category}">${categoryLabels[item.category]}</span>
+                    <div class="replacement">
+                      <span class="old">${item.word}</span>
+                      <span class="arrow">→</span>
+                      <span class="new">${item.replacement}</span>
+                    </div>
+                  </div>
+                  <button class="btn btn-outline btn-sm" onclick="replaceWord('${item.word}', '${item.replacement}')">Replace</button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+        statusText.innerHTML = `⚠️ <span>${totalIssues} issue${totalIssues !== 1 ? 's' : ''} found</span>`;
+        statusText.className = 'status warning';
+        replaceAllBtn.style.display = 'flex';
+      }
+    }
+
+    function replaceWord(word, replacement) {
+      const regex = new RegExp(word, 'gi');
+      textInput.value = textInput.value.replace(regex, replacement);
+      checkText();
+      showToast(`Replaced "${word}" with "${replacement}"`);
+    }
+
+    function replaceAll() {
+      let text = textInput.value;
+      let count = 0;
+
+      for (const item of restrictedWords) {
+        const regex = new RegExp(item.word, 'gi');
+        const matches = text.match(regex);
+        if (matches) {
+          count += matches.length;
+          text = text.replace(regex, item.replacement);
+        }
+      }
+
+      textInput.value = text;
+      checkText();
+      showToast(`Replaced ${count} restricted word${count !== 1 ? 's' : ''}!`);
+    }
+
+    async function pasteText() {
+      try {
+        const text = await navigator.clipboard.readText();
+        textInput.value = text;
+        checkText();
+        showToast('Text pasted!');
+      } catch {
+        showToast('Unable to paste. Please paste manually.');
+      }
+    }
+
+    async function copyText() {
+      if (!textInput.value.trim()) {
+        showToast('Nothing to copy');
+        return;
+      }
+      await navigator.clipboard.writeText(textInput.value);
+      showToast('Copied to clipboard!');
+    }
+
+    function clearText() {
+      textInput.value = '';
+      checkText();
+      showToast('Text cleared');
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show', 'success');
+      setTimeout(() => {
+        toast.classList.remove('show', 'success');
+      }, 2500);
+    }
+  </script>
+</body>
+</html>
