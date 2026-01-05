@@ -23,3 +23,7 @@
 ## Custom footer
 
 <img width="1903" height="341" alt="image" src="https://github.com/user-attachments/assets/ca816545-d28d-47fa-bd17-a9bd7059fd43" />
+
+## Video carosaul
+
+<img width="1876" height="782" alt="image" src="https://github.com/user-attachments/assets/ffbd5222-8b12-485a-8268-ecb9941025c8" />
