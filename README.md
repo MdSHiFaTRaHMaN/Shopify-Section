@@ -15,3 +15,7 @@
 ##  divider Section
 
 <img width="1904" height="157" alt="image" src="https://github.com/user-attachments/assets/dc326c3c-a949-491a-bc21-77b9c7949acf" />
+
+## customer reviews 
+
+<img width="1365" height="370" alt="image" src="https://github.com/user-attachments/assets/89c0fc77-7a0a-44ac-bfbb-9d64ac47ceb2" />
