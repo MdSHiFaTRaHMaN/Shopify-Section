@@ -1,0 +1,963 @@
+{% schema %}
+{
+  "name": "Product Card Grid",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "background-1"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 4,
+      "label": "Number of products to show"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product_card",
+      "name": "Manual Product Card",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Select Product"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Product Image (override)"
+        },
+        {
+          "type": "image_picker",
+          "id": "hover_image",
+          "label": "Hover Image (override)"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Product Title (override)"
+        },
+        
+        {
+          "type": "text",
+          "id": "price",
+          "label": "Price (override)"
+        },
+        {
+          "type": "text",
+          "id": "badge_text",
+          "label": "Badge Text (leave empty to hide)"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "CHOOSE OPTIONS"
+        },
+        {
+          "type": "header",
+          "content": "Popup Settings"
+        },
+        {
+          "type": "image_picker",
+          "id": "popup_image",
+          "label": "Popup Image (override)"
+        },
+        {
+          "type": "text",
+          "id": "popup_title",
+          "label": "Popup Title (override)"
+        },
+        {
+          "type": "text",
+          "id": "popup_price",
+          "label": "Popup Price (override)"
+        },
+        {
+          "type": "text",
+          "id": "view_details_text",
+          "label": "View Details Button Text",
+          "default": "View details"
+        },
+        {
+          "type": "header",
+          "content": "Size Options"
+        },
+        {
+          "type": "text",
+          "id": "size_label",
+          "label": "Size Label",
+          "default": "Size:"
+        },
+        {
+          "type": "text",
+          "id": "size_guide_text",
+          "label": "Size Guide Text",
+          "default": "What is my size?"
+        },
+        {
+          "type": "url",
+          "id": "size_guide_link",
+          "label": "Size Guide Link"
+        },
+        {
+          "type": "header",
+          "content": "Buttons"
+        },
+        {
+          "type": "text",
+          "id": "add_to_cart_text",
+          "label": "Add to Cart Button Text",
+          "default": "ADD TO CART"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Card Grid",
+      "blocks": []
+    }
+  ]
+}
+{% endschema %}
+
+{% style %}
+  .product-card-section {
+    width: 100%;
+    padding: 60px 20px;
+  }
+  
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  
+  .product-card {
+    position: relative;
+    overflow: hidden;
+    background: rgb(var(--color-background));
+    cursor: pointer;
+  }
+  
+  .product-card__image-wrapper {
+    position: relative;
+    aspect-ratio: 3/4;
+    overflow: hidden;
+  }
+  
+  .product-card__image,
+  .product-card__hover-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.3s ease;
+  }
+  
+  .product-card__hover-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+  }
+  
+  .product-card:hover .product-card__hover-image {
+    opacity: 1;
+  }
+  
+  .product-card__badge {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    background: rgba(var(--color-foreground), 0.9);
+    color: rgb(var(--color-background));
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    z-index: 2;
+  }
+  
+  .product-card__button {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
+    background: rgba(var(--color-background), 0.95);
+    color: rgb(var(--color-foreground));
+    border: none;
+    padding: 14px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+  }
+  
+  .product-card:hover .product-card__button {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .product-card__info {
+    padding: 16px 12px;
+  }
+  
+  .product-card__title {
+    font-size: 14px;
+    font-weight: 400;
+    margin: 0 0 8px 0;
+    color: rgb(var(--color-foreground));
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+  
+  .product-card__title:hover {
+    opacity: 0.7;
+  }
+  
+  .product-card__price {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgb(var(--color-foreground));
+  }
+  
+  /* Popup Styles */
+  .product-popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  
+  .product-popup.active {
+    display: flex;
+  }
+  
+  .product-popup__content {
+    background: rgb(var(--color-background));
+    max-width: 900px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .product-popup__close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    z-index: 10;
+    color: rgb(var(--color-foreground));
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+  
+  .product-popup__image {
+    flex: 0 0 40%;
+    position: relative;
+  }
+  
+  .product-popup__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .product-popup__details {
+    flex: 1;
+    padding: 60px 40px 40px;
+  }
+  
+  .product-popup__title {
+    font-size: 18px;
+    font-weight: 400;
+    margin: 0 0 8px 0;
+    color: rgb(var(--color-foreground));
+  }
+  
+  .product-popup__price {
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0 0 24px 0;
+    color: rgb(var(--color-foreground));
+  }
+  
+  .product-popup__view-link {
+    display: inline-block;
+    text-decoration: underline;
+    font-size: 14px;
+    margin-bottom: 32px;
+    color: rgb(var(--color-foreground));
+  }
+  
+  .product-popup__option {
+    margin-bottom: 24px;
+  }
+  
+  .product-popup__label {
+    font-size: 14px;
+    font-weight: 400;
+    margin-bottom: 12px;
+    display: block;
+    color: rgb(var(--color-foreground));
+  }
+  
+  .product-popup__colors {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .color-option {
+    min-width: 32px;
+    min-height: 32px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .color-option.selected {
+    border-color: rgb(var(--color-foreground));
+    box-shadow: 0 0 0 2px rgb(var(--color-background));
+  }
+  
+  .color-option__swatch {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+  
+  .product-popup__sizes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .size-option {
+    min-width: 56px;
+    padding: 10px 16px;
+    border: 1px solid rgba(var(--color-foreground), 0.2);
+    background: transparent;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    color: rgb(var(--color-foreground));
+  }
+  
+  .size-option.selected {
+    border-color: rgb(var(--color-foreground));
+    background: rgb(var(--color-foreground));
+    color: rgb(var(--color-background));
+  }
+  
+  .product-popup__size-guide {
+    display: inline-block;
+    text-decoration: underline;
+    font-size: 13px;
+    margin-top: 12px;
+    color: rgb(var(--color-foreground));
+  }
+  
+  .product-popup__add-to-cart {
+    width: 100%;
+    padding: 16px;
+    background: rgb(var(--color-foreground));
+    color: rgb(var(--color-background));
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    cursor: pointer;
+    margin-top: 32px;
+    transition: opacity 0.2s ease;
+  }
+  
+  .product-popup__add-to-cart:hover {
+    opacity: 0.85;
+  }
+  
+  .product-popup__add-to-cart:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  /* Cart notification */
+  .cart-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgb(var(--color-foreground));
+    color: rgb(var(--color-background));
+    padding: 16px 24px;
+    border-radius: 4px;
+    z-index: 10000;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: all 0.3s ease;
+    pointer-events: none;
+  }
+  
+  .cart-notification.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  @media (max-width: 768px) {
+    .product-card-section {
+      padding: 30px 15px;
+    }
+    
+    .product-popup__content {
+      flex-direction: column;
+      max-height: 95vh;
+    }
+    
+    .product-popup__image {
+      flex: 0 0 auto;
+      max-height: 50vh;
+    }
+    
+    .product-popup__details {
+      padding: 30px 20px;
+    }
+    
+    .product-grid {
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+    }
+    
+    .cart-notification {
+      top: 10px;
+      right: 10px;
+      left: 10px;
+      text-align: center;
+    }
+  }
+{% endstyle %}
+
+<div class="product-card-section color-{{ section.settings.color_scheme }}">
+  <div class="product-grid">
+    {% comment %} Collection Products {% endcomment %}
+    {% if section.settings.collection != blank %}
+      {% assign collection = collections[section.settings.collection] %}
+      {% for product in collection.products limit: section.settings.products_to_show %}
+        <div class="product-card" data-popup-id="popup-collection-{{ product.id }}" data-product-id="{{ product.id }}">
+          <div class="product-card__image-wrapper">
+            {% if product.featured_image %}
+              <img src="{{ product.featured_image | img_url: '600x' }}" 
+                   alt="{{ product.title }}" 
+                   class="product-card__image"
+                   loading="lazy">
+            {% endif %}
+            
+            {% if product.images[1] %}
+              <img src="{{ product.images[1] | img_url: '600x' }}" 
+                   alt="{{ product.title }}" 
+                   class="product-card__hover-image"
+                   loading="lazy">
+            {% endif %}
+            
+            <button class="product-card__button" onclick="openPopup('popup-collection-{{ product.id }}')">
+              CHOOSE OPTIONS
+            </button>
+          </div>
+          
+          <div class="product-card__info">
+            <h3 class="product-card__title" onclick="window.location.href='{{ product.url }}'">
+              {{ product.title }}
+            </h3>
+            <p class="product-card__price">{{ product.price | money }}</p>
+          </div>
+        </div>
+        
+        <!-- Popup for Collection Product -->
+        <div class="product-popup" id="popup-collection-{{ product.id }}">
+          <div class="product-popup__content">
+            <button class="product-popup__close" onclick="closePopup('popup-collection-{{ product.id }}')">&times;</button>
+            
+            <div class="product-popup__image">
+              {% if product.featured_image %}
+                <img src="{{ product.featured_image | img_url: '800x' }}" 
+                     alt="{{ product.title }}">
+              {% endif %}
+            </div>
+            
+            <div class="product-popup__details">
+              <h2 class="product-popup__title">{{ product.title }}</h2>
+              <p class="product-popup__price">{{ product.price | money }}</p>
+              
+              <a href="{{ product.url }}" class="product-popup__view-link">
+                View details
+              </a>
+              
+              {% if product.options_with_values.size > 0 %}
+                {% for option in product.options_with_values %}
+                  <div class="product-popup__option">
+                    <label class="product-popup__label">{{ option.name }}:</label>
+                    
+                    {% if option.name == 'Color' or option.name == 'Colour' %}
+                      <div class="product-popup__colors">
+                        {% for value in option.values %}
+                          <div class="color-option {% if forloop.first %}selected{% endif %}" 
+                               data-value="{{ value }}"
+                               onclick="selectColor(this)">
+                            <div class="color-option__swatch" 
+                                 style="background-color: {{ value | handle }};"
+                                 title="{{ value }}"></div>
+                          </div>
+                        {% endfor %}
+                      </div>
+                      <span class="selected-color-name" style="font-size: 13px; margin-top: 8px; display: block; color: rgb(var(--color-foreground));">
+                        {{ option.values.first }}
+                      </span>
+                    {% elsif option.name == 'Size' %}
+                      <div class="product-popup__sizes">
+                        {% for value in option.values %}
+                          <button class="size-option {% if forloop.first %}selected{% endif %}" 
+                                  data-value="{{ value }}"
+                                  onclick="selectSize(this)">
+                            {{ value }}
+                          </button>
+                        {% endfor %}
+                      </div>
+                    {% else %}
+                      <div class="product-popup__sizes">
+                        {% for value in option.values %}
+                          <button class="size-option {% if forloop.first %}selected{% endif %}" 
+                                  data-value="{{ value }}"
+                                  onclick="selectSize(this)">
+                            {{ value }}
+                          </button>
+                        {% endfor %}
+                      </div>
+                    {% endif %}
+                  </div>
+                {% endfor %}
+              {% endif %}
+              
+              <button class="product-popup__add-to-cart" 
+                      onclick="addToCartCollection{{ product.id }}()">
+                ADD TO CART
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <script>
+          function addToCartCollection{{ product.id }}() {
+            const popup = document.getElementById('popup-collection-{{ product.id }}');
+            const button = popup.querySelector('.product-popup__add-to-cart');
+            
+            // Disable button
+            button.disabled = true;
+            button.textContent = 'ADDING...';
+            
+            // Collect selected options
+            const selectedOptions = [];
+            const allOptions = popup.querySelectorAll('.product-popup__option');
+            
+            allOptions.forEach((optionDiv, index) => {
+              const selected = optionDiv.querySelector('[data-value].selected');
+              if (selected) {
+                selectedOptions.push(selected.getAttribute('data-value'));
+              }
+            });
+            
+            console.log('Selected options:', selectedOptions);
+            
+            // Find matching variant
+            const variants = {{ product.variants | json }};
+            console.log('All variants:', variants);
+            
+            let selectedVariant = null;
+            
+            // If product has no options, use first variant
+            if (variants.length === 1) {
+              selectedVariant = variants[0];
+            } else {
+              // Match variant by options
+              for (let variant of variants) {
+                let matches = true;
+                for (let i = 0; i < selectedOptions.length; i++) {
+                  const optionKey = 'option' + (i + 1);
+                  if (variant[optionKey] !== selectedOptions[i]) {
+                    matches = false;
+                    break;
+                  }
+                }
+                if (matches) {
+                  selectedVariant = variant;
+                  break;
+                }
+              }
+            }
+            
+            console.log('Selected variant:', selectedVariant);
+            
+            if (selectedVariant && selectedVariant.available) {
+              fetch('/cart/add.js', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  id: selectedVariant.id,
+                  quantity: 1
+                })
+              })
+              .then(response => response.json())
+              .then(data => {
+                console.log('Cart response:', data);
+                
+                // Show success notification
+                showCartNotification('Added to cart!');
+                
+                // Update cart icon
+                document.documentElement.dispatchEvent(new CustomEvent('cart:refresh', {
+                  bubbles: true
+                }));
+                
+                // Re-enable button
+                button.disabled = false;
+                button.textContent = 'ADD TO CART';
+                
+                // Close popup after short delay
+                setTimeout(() => {
+                  closePopup('popup-collection-{{ product.id }}');
+                }, 800);
+              })
+              .catch(error => {
+                console.error('Error:', error);
+                showCartNotification('Error adding to cart', true);
+                button.disabled = false;
+                button.textContent = 'ADD TO CART';
+              });
+            } else if (selectedVariant && !selectedVariant.available) {
+              showCartNotification('This variant is out of stock', true);
+              button.disabled = false;
+              button.textContent = 'ADD TO CART';
+            } else {
+              showCartNotification('Please select all options', true);
+              button.disabled = false;
+              button.textContent = 'ADD TO CART';
+            }
+          }
+        </script>
+      {% endfor %}
+    {% endif %}
+    
+    {% comment %} Manual Blocks {% endcomment %}
+    {% for block in section.blocks %}
+      {% assign product = all_products[block.settings.product] %}
+      
+      {% if product != blank %}
+        {% assign card_title = block.settings.title | default: product.title %}
+        {% assign card_price = block.settings.price | default: product.price | money %}
+        {% assign card_image = block.settings.image | default: product.featured_image %}
+        {% assign card_hover_image = block.settings.hover_image | default: product.images[1] %}
+        {% assign popup_image = block.settings.popup_image | default: product.featured_image %}
+        {% assign popup_title = block.settings.popup_title | default: product.title %}
+        {% assign popup_price = block.settings.popup_price | default: product.price | money %}
+        {% assign product_url = product.url %}
+      {% else %}
+        {% assign card_title = block.settings.title %}
+        {% assign card_price = block.settings.price %}
+        {% assign card_image = block.settings.image %}
+        {% assign card_hover_image = block.settings.hover_image %}
+        {% assign popup_image = block.settings.popup_image %}
+        {% assign popup_title = block.settings.popup_title %}
+        {% assign popup_price = block.settings.popup_price %}
+        {% assign product_url = '#' %}
+      {% endif %}
+      
+      <div class="product-card" data-popup-id="popup-{{ block.id }}" {{ block.shopify_attributes }}>
+        <div class="product-card__image-wrapper">
+          {% if card_image %}
+            <img src="{{ card_image | img_url: '600x' }}" 
+                 alt="{{ card_title }}" 
+                 class="product-card__image"
+                 loading="lazy">
+          {% endif %}
+          
+          {% if card_hover_image %}
+            <img src="{{ card_hover_image | img_url: '600x' }}" 
+                 alt="{{ card_title }}" 
+                 class="product-card__hover-image"
+                 loading="lazy">
+          {% endif %}
+          
+          {% if block.settings.badge_text != blank %}
+            <div class="product-card__badge">{{ block.settings.badge_text }}</div>
+          {% endif %}
+          
+          <button class="product-card__button" onclick="openPopup('popup-{{ block.id }}')">
+            {{ block.settings.button_text }}
+          </button>
+        </div>
+        
+        <div class="product-card__info">
+          <h3 class="product-card__title" onclick="window.location.href='{{ product_url }}'">
+            {{ card_title }}
+          </h3>
+          <p class="product-card__price">{{ card_price }}</p>
+        </div>
+      </div>
+      
+      <!-- Popup -->
+      <div class="product-popup" id="popup-{{ block.id }}">
+        <div class="product-popup__content">
+          <button class="product-popup__close" onclick="closePopup('popup-{{ block.id }}')">&times;</button>
+          
+          <div class="product-popup__image">
+            {% if popup_image %}
+              <img src="{{ popup_image | img_url: '800x' }}" 
+                   alt="{{ popup_title }}">
+            {% endif %}
+          </div>
+          
+          <div class="product-popup__details">
+            <h2 class="product-popup__title">{{ popup_title }}</h2>
+            <p class="product-popup__price">{{ popup_price }}</p>
+            
+            <a href="{{ product_url }}" class="product-popup__view-link">
+              {{ block.settings.view_details_text }}
+            </a>
+            
+            {% if product != blank and product.options_with_values.size > 0 %}
+              {% for option in product.options_with_values %}
+                <div class="product-popup__option">
+                  <label class="product-popup__label">{{ option.name }}:</label>
+                  
+                  {% if option.name == 'Color' or option.name == 'Colour' %}
+                    <div class="product-popup__colors">
+                      {% for value in option.values %}
+                        <div class="color-option {% if forloop.first %}selected{% endif %}" 
+                             data-value="{{ value }}"
+                             onclick="selectColor(this)">
+                          <div class="color-option__swatch" 
+                               style="background-color: {{ value | handle }};"
+                               title="{{ value }}"></div>
+                        </div>
+                      {% endfor %}
+                    </div>
+                    <span class="selected-color-name" style="font-size: 13px; margin-top: 8px; display: block; color: rgb(var(--color-foreground));">
+                      {{ option.values.first }}
+                    </span>
+                  {% elsif option.name == 'Size' %}
+                    <div class="product-popup__sizes">
+                      {% for value in option.values %}
+                        <button class="size-option {% if forloop.first %}selected{% endif %}" 
+                                data-value="{{ value }}"
+                                onclick="selectSize(this)">
+                          {{ value }}
+                        </button>
+                      {% endfor %}
+                    </div>
+                    {% if block.settings.size_guide_link %}
+                      <a href="{{ block.settings.size_guide_link }}" class="product-popup__size-guide">
+                        {{ block.settings.size_guide_text }}
+                      </a>
+                    {% endif %}
+                  {% else %}
+                    <div class="product-popup__sizes">
+                      {% for value in option.values %}
+                        <button class="size-option {% if forloop.first %}selected{% endif %}" 
+                                data-value="{{ value }}"
+                                onclick="selectSize(this)">
+                          {{ value }}
+                        </button>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                </div>
+              {% endfor %}
+            {% endif %}
+            
+            <button class="product-popup__add-to-cart" 
+                    onclick="addToCart{{ block.id }}()">
+              {{ block.settings.add_to_cart_text }}
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <script>
+        function addToCart{{ block.id }}() {
+          {% if product != blank %}
+            const popup = document.getElementById('popup-{{ block.id }}');
+            const button = popup.querySelector('.product-popup__add-to-cart');
+            const selectedOptions = {};
+            
+            // Disable button
+            button.disabled = true;
+            button.textContent = 'ADDING...';
+            
+            {% for option in product.options_with_values %}
+              const option{{ forloop.index }} = popup.querySelector('[data-value].selected');
+              if (option{{ forloop.index }}) {
+                selectedOptions['{{ option.name }}'] = option{{ forloop.index }}.getAttribute('data-value');
+              }
+            {% endfor %}
+            
+            // Find matching variant
+            let selectedVariant = null;
+            const variants = {{ product.variants | json }};
+            
+            for (let variant of variants) {
+              let matches = true;
+              {% for option in product.options_with_values %}
+                if (variant.option{{ forloop.index }} !== selectedOptions['{{ option.name }}']) {
+                  matches = false;
+                  break;
+                }
+              {% endfor %}
+              if (matches) {
+                selectedVariant = variant;
+                break;
+              }
+            }
+            
+            if (selectedVariant) {
+              fetch('/cart/add.js', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  id: selectedVariant.id,
+                  quantity: 1
+                })
+              })
+              .then(response => response.json())
+              .then(data => {
+                // Show success notification
+                showCartNotification('Added to cart!');
+                
+                // Update cart icon (trigger cart drawer if your theme supports it)
+                if (typeof window.dispatchEvent !== 'undefined') {
+                  window.dispatchEvent(new Event('cart:updated'));
+                }
+                
+                // Re-enable button
+                button.disabled = false;
+                button.textContent = '{{ block.settings.add_to_cart_text }}';
+                
+                // Close popup after short delay
+                setTimeout(() => {
+                  closePopup('popup-{{ block.id }}');
+                }, 800);
+              })
+              .catch(error => {
+                console.error('Error:', error);
+                showCartNotification('Error adding to cart', true);
+                button.disabled = false;
+                button.textContent = '{{ block.settings.add_to_cart_text }}';
+              });
+            } else {
+              button.disabled = false;
+              button.textContent = '{{ block.settings.add_to_cart_text }}';
+            }
+          {% else %}
+            showCartNotification('Please select a product', true);
+          {% endif %}
+        }
+      </script>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Cart Notification -->
+<div class="cart-notification" id="cartNotification"></div>
+
+<script>
+  function openPopup(id) {
+    document.getElementById(id).classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  
+  function closePopup(id) {
+    document.getElementById(id).classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  
+  function selectColor(element) {
+    const container = element.parentElement;
+    container.querySelectorAll('.color-option').forEach(opt => {
+      opt.classList.remove('selected');
+    });
+    element.classList.add('selected');
+    
+    // Update color name display
+    const colorValue = element.getAttribute('data-value');
+    const nameDisplay = container.parentElement.querySelector('.selected-color-name');
+    if (nameDisplay && colorValue) {
+      nameDisplay.textContent = colorValue;
+    }
+  }
+  
+  function selectSize(element) {
+    const container = element.parentElement;
+    container.querySelectorAll('.size-option').forEach(opt => {
+      opt.classList.remove('selected');
+    });
+    element.classList.add('selected');
+  }
+  
+  function showCartNotification(message, isError = false) {
+    const notification = document.getElementById('cartNotification');
+    notification.textContent = message;
+    notification.style.background = isError ? '#dc2626' : 'rgb(var(--color-foreground))';
+    notification.classList.add('show');
+    
+    setTimeout(() => {
+      notification.classList.remove('show');
+    }, 3000);
+  }
+  
+  // Close popup when clicking outside
+  document.addEventListener('click', function(event) {
+    if (event.target.classList.contains('product-popup')) {
+      event.target.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  });
+</script>
