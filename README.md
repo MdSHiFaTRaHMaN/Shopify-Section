@@ -32,3 +32,6 @@
 
 <img width="1897" height="723" alt="image" src="https://github.com/user-attachments/assets/ef443d30-9a0a-4027-9afe-f08714369f6d" />
 
+## video-with-product
+
+<img width="1847" height="856" alt="image" src="https://github.com/user-attachments/assets/5a83e87a-b02f-4869-837c-042e80e02bc2" />
